@@ -30,8 +30,7 @@ void moverFlechitaMenu(int&);
 void dibujarMapa();
 void ubicarFicha(int&, int&);
 void iniciarPartida();
-void moverFlechitaHorizontalTablero(int&);
-void moverFlechitaVerticalTablero(int&);
+void moverFlechitasTablero(int&, int&);
 
 
 int main()
@@ -42,19 +41,20 @@ int main()
 }
 
 void menu()
-{
-	Console::BackgroundColor = ConsoleColor::Black;
-	Console::SetCursorPosition(10, 1);
-	printf("\t******************************* DAMAS *******************************\n");
-	Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 6);
-	printf("Nueva partida");
-	Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 8);
-	printf("Creditos");
-	Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 10);
-	printf("Salir");
+{	
 	int opcion = 0;
-	
 	do {
+		Console::Clear();
+		Console::BackgroundColor = ConsoleColor::Black;
+		Console::SetCursorPosition(10, 1);
+		printf("\t******************************* DAMAS *******************************\n");
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 6);
+		printf("Nueva partida");
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 8);
+		printf("Creditos");
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 10);
+		printf("Salir");
+		
 		moverFlechitaMenu(opcion);
 
 		switch (opcion)
@@ -140,24 +140,31 @@ void dibujarMapa()
 void ubicarFicha(int& x, int& y)
 {
 	Console::BackgroundColor = ConsoleColor::Black;
-	moverFlechitaHorizontalTablero(x);
+	moverFlechitasTablero(x, y);
+	Console::SetCursorPosition(60, 6);
+	printf("x=%d y=%d", x, y);
 } 
 
-void moverFlechitaHorizontalTablero(int& x)
+void moverFlechitasTablero(int& x, int& y)
 {
-	x = 0;
-	int posicionX, posicionY;
+	y = x = 0;
+	int posicionXHorizontal, posicionYHorizontal;
+	posicionXHorizontal = MARCO_IZQUIERDA_TABLERO + 2;
+	posicionYHorizontal = MARCO_ARRIBA_TABLERO + 8 * 2 + 2;
 
-	posicionX = MARCO_IZQUIERDA_TABLERO + 2;
-	posicionY = MARCO_ARRIBA_TABLERO + 8 * 2 + 2;
+	int posicionX, posicionY;
+	posicionX = MARCO_IZQUIERDA_TABLERO + 8 * 5 + 1;
+	posicionY = MARCO_ARRIBA_TABLERO + 2;
 	char tecla;
 
 	
 	do {
-		int posicionAnterior = posicionX + x * 5;
-		int anterior = 0;
-		Console::SetCursorPosition(posicionX + x * 5, posicionY);
+		int posicionAnteriorHorizontal = posicionXHorizontal + x * 5;
+		Console::SetCursorPosition(posicionAnteriorHorizontal, posicionYHorizontal);
 		printf("%c", FLECHA_ARRIBA);
+		int posicionAnterior = posicionY + y * 2;
+		Console::SetCursorPosition(posicionX, posicionAnterior);
+		printf("%c", FLECHA_IZQUIERDA);
 		tecla = getch();
 		switch (tecla)
 		{
@@ -170,35 +177,18 @@ void moverFlechitaHorizontalTablero(int& x)
 			if (x > 0) 
 				x--;
 			break;
-		}
-		Console::SetCursorPosition(posicionAnterior, posicionY);
-		printf(" ");
-	} while (tecla != ENTER);
-}
-void moverFlechitaVerticalTablero(int& y)
-{
-	y = 0;
-	int posicionX, posicionY;
-
-	posicionX = MARCO_IZQUIERDA_TABLERO + 8 * 4 + 1;
-	posicionY = MARCO_ARRIBA_TABLERO + 8 * 2 + 1;
-	char tecla;
-	do {
-		int anterior = 0;
-		Console::SetCursorPosition(posicionX, posicionY + y * 2);
-		printf("%c", FLECHA_IZQUIERDA);
-		tecla = getch();
-		switch (tecla)
-		{
-		case DERECHA:
+		case ABAJO:
 			if (y < 8 - 1)
 				y++;
 			break;
-		case IZQUIERDA:
+		case ARRIBA:
 			if (y > 0)
 				y--;
 			break;
 		}
-
+		Console::SetCursorPosition(posicionAnteriorHorizontal, posicionYHorizontal);
+		printf(" ");
+		Console::SetCursorPosition(posicionX, posicionAnterior);
+		printf(" ");
 	} while (tecla != ENTER);
 }
