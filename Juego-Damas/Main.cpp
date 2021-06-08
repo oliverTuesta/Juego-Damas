@@ -15,6 +15,7 @@ const int ENTER = 13;
 const int FLECHA_DERECHA = 16;
 const int FLECHA_ARRIBA = 94;
 const int FLECHA_IZQUIERDA = 60;
+const int CARACTER_FICHA = 'o';
 
 const int PRIMERA_OPCION_MENU = 0;
 const int ULTIMA_OPCION_MENU = 2;
@@ -28,10 +29,63 @@ const int MARCO_ARRIBA_TABLERO = 3;
 void menu();
 void moverFlechitaMenu(int&);
 void dibujarMapa();
-void ubicarFicha(int&, int&);
+void ubicarCoordenada(int&, int&);
 void iniciarPartida();
 void moverFlechitasTablero(int&, int&);
+void inisializarFichas();
+void moverFicha(int, int, int, int);
+void dibujarFichas();
+void borrarTexto();
 
+struct ficha {
+	bool existe = false;
+};
+
+ficha** fichas;
+
+void inisializarFichas() {
+	fichas = new ficha* [LADO_TABLERO];
+
+	for (int i = 0; i < LADO_TABLERO; i++)
+	{
+		fichas[i] = new ficha[LADO_TABLERO];
+	}
+	fichas[3][4].existe = true;
+}
+
+void moverFicha(int x, int y, int xNuevo, int yNuevo)
+{
+	if (fichas[y][x].existe)
+	{
+		Console::SetCursorPosition(MARCO_IZQUIERDA_TABLERO + x * 5 + 2,
+			MARCO_ARRIBA_TABLERO + (y + 1) * 2);
+		Console::BackgroundColor = ConsoleColor::Black;
+		printf(" ");
+		fichas[y][x].existe = false;
+		fichas[yNuevo][xNuevo].existe = true;
+	}
+}
+
+void dibujarFichas()
+{
+	for (int i = 0; i < LADO_TABLERO; i++)
+	{
+		for (int j = 0; j < LADO_TABLERO; j++)
+		{
+			ficha f = fichas[i][j];
+			if (f.existe)
+			{
+				Console::SetCursorPosition(MARCO_IZQUIERDA_TABLERO + j * 5 + 2,
+					MARCO_ARRIBA_TABLERO + (i+1)*2);
+				Console::BackgroundColor = ConsoleColor::Black;
+				printf("%c", CARACTER_FICHA);
+			}
+			
+		}
+		
+	}
+	
+}
 
 int main()
 {
@@ -106,9 +160,28 @@ void moverFlechitaMenu(int& opcion)
 void iniciarPartida()
 {
 	int x, y;
+	int xNuevo, yNuevo;
 	Console::Clear();
 	dibujarMapa();
-	ubicarFicha(x, y);
+	inisializarFichas();
+	dibujarFichas();
+	do {
+		ubicarCoordenada(x, y);
+		if (!fichas[y][x].existe)
+		{
+			Console::SetCursorPosition(60, 6);
+			printf("NO EXISTE NINGUNA FICHA EN ESA POSICION");
+			Console::SetCursorPosition(60, 7);
+			printf("INTENTE OTRA VEZ");
+			continue;
+		}
+		else
+			borrarTexto();
+		ubicarCoordenada(xNuevo, yNuevo);
+		moverFicha(x, y, xNuevo, yNuevo);
+		dibujarFichas();
+	} while (x != 0 || y != 0);
+	_getch();
 }
 
 void dibujarMapa()
@@ -128,7 +201,7 @@ void dibujarMapa()
 				Console::BackgroundColor = ConsoleColor::Black;
 
 			Console::SetCursorPosition(MARCO_IZQUIERDA_TABLERO + j, posicionY);
-			printf("  o  ");
+			printf("     ");
 			Console::SetCursorPosition(MARCO_IZQUIERDA_TABLERO + j, posicionY+1);
 			printf("     ");
 			z++;
@@ -137,12 +210,10 @@ void dibujarMapa()
 	}
 }
 
-void ubicarFicha(int& x, int& y)
+void ubicarCoordenada(int& x, int& y)
 {
 	Console::BackgroundColor = ConsoleColor::Black;
 	moverFlechitasTablero(x, y);
-	Console::SetCursorPosition(60, 6);
-	printf("x=%d y=%d", x, y);
 } 
 
 void moverFlechitasTablero(int& x, int& y)
@@ -152,9 +223,9 @@ void moverFlechitasTablero(int& x, int& y)
 	posicionXHorizontal = MARCO_IZQUIERDA_TABLERO + 2;
 	posicionYHorizontal = MARCO_ARRIBA_TABLERO + 8 * 2 + 2;
 
-	int posicionX, posicionY;
-	posicionX = MARCO_IZQUIERDA_TABLERO + 8 * 5 + 1;
-	posicionY = MARCO_ARRIBA_TABLERO + 2;
+	int posicionXVertical, posicionYVertical;
+	posicionXVertical = MARCO_IZQUIERDA_TABLERO + 8 * 5 + 1;
+	posicionYVertical = MARCO_ARRIBA_TABLERO + 2;
 	char tecla;
 
 	
@@ -162,8 +233,8 @@ void moverFlechitasTablero(int& x, int& y)
 		int posicionAnteriorHorizontal = posicionXHorizontal + x * 5;
 		Console::SetCursorPosition(posicionAnteriorHorizontal, posicionYHorizontal);
 		printf("%c", FLECHA_ARRIBA);
-		int posicionAnterior = posicionY + y * 2;
-		Console::SetCursorPosition(posicionX, posicionAnterior);
+		int posicionAnteriorVertical = posicionYVertical + y * 2;
+		Console::SetCursorPosition(posicionXVertical, posicionAnteriorVertical);
 		printf("%c", FLECHA_IZQUIERDA);
 		tecla = getch();
 		switch (tecla)
@@ -186,9 +257,19 @@ void moverFlechitasTablero(int& x, int& y)
 				y--;
 			break;
 		}
+		//borrar anteriores flechitas
 		Console::SetCursorPosition(posicionAnteriorHorizontal, posicionYHorizontal);
 		printf(" ");
-		Console::SetCursorPosition(posicionX, posicionAnterior);
+		Console::SetCursorPosition(posicionXVertical, posicionAnteriorVertical);
 		printf(" ");
 	} while (tecla != ENTER);
+}
+void borrarTexto()
+{
+	for (int i = 0; i < 6; i++)
+	{
+		Console::SetCursorPosition(60, 6 + i);
+		printf("                                         ");
+	}
+	
 }
