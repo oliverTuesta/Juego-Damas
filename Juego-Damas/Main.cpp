@@ -38,9 +38,11 @@ void inisializarFichas();
 void moverFicha(int, int, int, int);
 void dibujarFichas();
 void borrarTexto();
-bool puedeMover(int, int, int, int);
+bool puedeMover(int, int, int, int, bool &);
 bool estaEnDiagonal(int, int, int, int);
 void mensajesDeError(int);
+void comerFichas(int, int, int, int);
+bool estaEnNegro(int, int);
 
 struct ficha {
 	bool existe = false;
@@ -77,8 +79,13 @@ void inisializarFichas() {
 
 void moverFicha(int x, int y, int xNuevo, int yNuevo)
 {
-	if (puedeMover(x, y, xNuevo, yNuevo))
+	bool come = false;
+	if (puedeMover(x, y, xNuevo, yNuevo, come))
 	{
+		if (come)
+		{
+			comerFichas(x, y, xNuevo, yNuevo);
+		}
 		Console::SetCursorPosition(MARCO_IZQUIERDA_TABLERO + x * 5 + 2,
 			MARCO_ARRIBA_TABLERO + (y + 1) * 2);
 		Console::BackgroundColor = ConsoleColor::Black;
@@ -97,11 +104,11 @@ void dibujarFichas()
 		for (int j = 0; j < LADO_TABLERO; j++)
 		{
 			ficha f = fichas[i][j];
+			Console::SetCursorPosition(MARCO_IZQUIERDA_TABLERO + j * 5 + 2,
+				MARCO_ARRIBA_TABLERO + (i + 1) * 2);
+			Console::BackgroundColor = ConsoleColor::Black;
 			if (f.existe)
 			{
-				Console::SetCursorPosition(MARCO_IZQUIERDA_TABLERO + j * 5 + 2,
-					MARCO_ARRIBA_TABLERO + (i+1)*2);
-				Console::BackgroundColor = ConsoleColor::Black;
 				switch (f.tipo)
 				{
 				case 'A':
@@ -111,9 +118,11 @@ void dibujarFichas()
 					Console::ForegroundColor = COLOR_FICHA_B;
 					break;
 				}
-				
+
 				printf("%c", CARACTER_FICHA);
 			}
+			else if(estaEnNegro(j, i))
+				printf(" ");
 			
 		}
 		
@@ -309,47 +318,51 @@ void borrarTexto()
 	
 }
 
-bool puedeMover(int x, int y, int xNuevo, int yNuevo)
+bool puedeMover(int x, int y, int xNuevo, int yNuevo, bool &come)
 {
-	bool estaEnNegro = false;
-	bool direccionCorrecta = false;
-	bool come = false;
+	bool mueveUno = false;
 	switch (fichas[y][x].tipo)
 	{
 	case 'A':
-		for (int i = 0; i < 7; i++)
+		for (int i = 1; i < abs(yNuevo - y); i++)
 		{
-			if (fichas[yNuevo][xNuevo].existe) {
-				yNuevo--;
+			if (xNuevo < x && fichas[y + i][x - i].existe && fichas[y + i][x - i].tipo == 'B')
 				come = true;
+			else if (xNuevo > x && fichas[y + i][x + i].existe && fichas[y + i][x + i].tipo == 'B')
+				come = true;
+			else
+			{
+				come = false;
+				break;
 			}
 		}
-		direccionCorrecta = yNuevo - y == 1;
+		mueveUno = yNuevo - y == 1;
 		break;
 	case 'B':
-		if (fichas[yNuevo][xNuevo].existe) {
-			yNuevo++;
-			come = true;
+		for (int i = 1; i < abs(yNuevo - y); i++)
+		{
+			if (xNuevo < x && fichas[y - i][x - i].existe && fichas[y - i][x - i].tipo == 'A')
+				come = true;
+			else if (xNuevo > x && fichas[y - i][x + i].existe && fichas[y - i][x + i].tipo == 'A')
+				come = true;
+			else
+			{
+				come = false;
+				break;
+			}
 		}
-		direccionCorrecta = y - yNuevo == 1;
+		mueveUno = y - yNuevo == 1;
 		break;
 	}
-	
-	if (yNuevo % 2 == 0)
-		estaEnNegro = xNuevo % 2 != 0;
-	else
-		estaEnNegro = xNuevo % 2 == 0;
 
-	if (fichas[yNuevo][xNuevo].existe || !estaEnNegro)
+	if (fichas[yNuevo][xNuevo].existe || !estaEnNegro(xNuevo, yNuevo))
 	{
 		//No se puede mover a esa posicion
 		mensajesDeError(2);
 		return false;
 	}
-	if (come)
-		mensajesDeError(3);
-
-	return true && estaEnDiagonal(x, y, xNuevo, yNuevo) && direccionCorrecta;
+	Console::SetCursorPosition(65, 14);
+	return estaEnDiagonal(x, y, xNuevo, yNuevo) && (mueveUno || come);
 }
 
 bool estaEnDiagonal(int x, int y, int xNuevo, int yNuevo)
@@ -377,7 +390,7 @@ void mensajesDeError(int tipo)
 		printf("INTENTE OTRA VEZ");
 		break;
 	case 3:
-		Console::SetCursorPosition(60, 10);
+		Console::SetCursorPosition(60, 14);
 		printf("Come");
 		Console::SetCursorPosition(60, 8);
 		printf("INTENTE OTRA VEZ");
@@ -388,3 +401,35 @@ void mensajesDeError(int tipo)
 	
 }
 
+void comerFichas(int x, int y, int xNuevo, int yNuevo)
+{
+	for (int i = 1; i < abs(yNuevo - y); i++)
+	{
+		if (fichas[y][x].tipo == 'A')
+		{
+			if (xNuevo < x)
+				fichas[y + i][x - i].existe = false;
+			else if (xNuevo > x)
+				fichas[y + i][x + i].existe = false;
+		}
+		else
+		{
+			if (xNuevo < x)
+				fichas[y - i][x - i].existe = false;
+			else if (xNuevo > x)
+				fichas[y - i][x + i].existe = false;
+		}
+		
+
+	}
+}
+
+bool estaEnNegro(int x, int y)
+{
+	bool estaNegro;
+	if (y % 2 == 0)
+		estaNegro = x % 2 != 0;
+	else
+		estaNegro = x % 2 == 0;
+	return estaNegro;
+}
