@@ -22,7 +22,7 @@ const int ULTIMA_OPCION_MENU = 2;
 
 const int MARCO_IZQUIERDA_MENU = 45;
 const int MARCO_IZQUIERDA_TABLERO = 10;
-const int MARCO_ARRIBA_TABLERO = 3;
+const int MARCO_ARRIBA_TABLERO = 5;
 
 const ConsoleColor COLOR_FICHA_B = ConsoleColor::Red;
 const ConsoleColor COLOR_FICHA_A = ConsoleColor::White;
@@ -47,6 +47,7 @@ void cambiarTurno(char&);
 void mostrarTurno(char, string, string);
 void pedirDatos(string&, string&);
 bool quedanMovimientos();
+void dibujarFichasComidas(int, int);
 
 struct ficha {
 	bool existe = false;
@@ -91,10 +92,7 @@ bool moverFicha(int x, int y, int xNuevo, int yNuevo, int &comidasA, int &comida
 		{
 			comerFichas(x, y, xNuevo, yNuevo, comidasA, comidasB);
 		}
-		Console::SetCursorPosition(MARCO_IZQUIERDA_TABLERO + x * 5 + 2,
-			MARCO_ARRIBA_TABLERO + (y + 1) * 2);
-		Console::BackgroundColor = ConsoleColor::Black;
-		printf(" ");
+
 		fichas[yNuevo][xNuevo] = fichas[y][x];
 		fichas[y][x].existe = false;
 		if (yNuevo == 0 || yNuevo == LADO_TABLERO - 1)
@@ -115,7 +113,7 @@ void dibujarFichas()
 		{
 			ficha f = fichas[i][j];
 			Console::SetCursorPosition(MARCO_IZQUIERDA_TABLERO + j * 5 + 2,
-				MARCO_ARRIBA_TABLERO + (i + 1) * 2);
+				MARCO_ARRIBA_TABLERO + i * 2);
 			Console::BackgroundColor = ConsoleColor::Black;
 			if (f.existe)
 			{
@@ -220,6 +218,7 @@ void iniciarPartida()
 	int puntosB = 0; //piezas A comidas
 
 	int x, y;
+	x = y = 0;
 	int xNuevo, yNuevo;
 	Console::Clear();
 	dibujarMapa();
@@ -236,6 +235,8 @@ void iniciarPartida()
 		ubicarCoordenada(x, y);
 		if (fichas[y][x].existe && fichas[y][x].tipo == turnoJugador)
 		{
+			xNuevo = x;
+			yNuevo = y;
 			borrarTexto();
 			ubicarCoordenada(xNuevo, yNuevo);
 			if(!moverFicha(x, y, xNuevo, yNuevo, puntosA, puntosB))
@@ -247,9 +248,12 @@ void iniciarPartida()
 					gameOver = true;
 				}
 			}
+			dibujarFichasComidas(puntosA, puntosB);
 		}
 		else
 			mensajes(1);
+		x = xNuevo;
+		y = yNuevo;
 	} while (!gameOver);
 	_getch();
 }
@@ -268,7 +272,7 @@ void dibujarMapa()
 	int posicionY = MARCO_ARRIBA_TABLERO;
 	for (int i = 0; i < LADO_TABLERO * 2; i += 2)
 	{
-		posicionY += 2;
+		
 		int z = i / 2 % 2 == 0 ? 0 : 1;
 		for (int j = 0; j < LADO_TABLERO * 5; j += 5)
 		{
@@ -284,7 +288,7 @@ void dibujarMapa()
 			printf("     ");
 			z++;
 		}
-		
+		posicionY += 2;
 	}
 }
 
@@ -297,14 +301,13 @@ void ubicarCoordenada(int& x, int& y)
 
 void moverFlechitasTablero(int& x, int& y)
 {
-	y = x = 0;
 	int posicionXHorizontal, posicionYHorizontal;
 	posicionXHorizontal = MARCO_IZQUIERDA_TABLERO + 2;
-	posicionYHorizontal = MARCO_ARRIBA_TABLERO + 8 * 2 + 2;
+	posicionYHorizontal = MARCO_ARRIBA_TABLERO + 8 * 2;
 
 	int posicionXVertical, posicionYVertical;
 	posicionXVertical = MARCO_IZQUIERDA_TABLERO + 8 * 5 + 1;
-	posicionYVertical = MARCO_ARRIBA_TABLERO + 2;
+	posicionYVertical = MARCO_ARRIBA_TABLERO;
 	char tecla;
 
 	Console::ForegroundColor = COLOR_FICHA_A;
@@ -465,6 +468,7 @@ void comerFichas(int x, int y, int xNuevo, int yNuevo, int &puntosA, int &puntos
 				fichas[y + 1][x + 1].existe = false;
 				f = fichas[y + 1][x + 1];
 			}
+			puntosA++;
 		}
 		else
 		{
@@ -476,12 +480,8 @@ void comerFichas(int x, int y, int xNuevo, int yNuevo, int &puntosA, int &puntos
 				fichas[y - 1][x + 1].existe = false;
 				f = fichas[y - 1][x + 1];
 			}
-		}
-		if (f.tipo == 'A')
-			puntosA++;
-
-		else
 			puntosB++;
+		}
 		
 }
 
@@ -532,4 +532,25 @@ bool quedanMovimientos()
 		}
 	}
 	return quedan;
+}
+
+void dibujarFichasComidas(int puntosA, int puntosB) 
+{
+	Console::BackgroundColor = ConsoleColor::Black;
+	//fichas comidas por A
+	Console::ForegroundColor = COLOR_FICHA_B;
+	for (int i = 0; i < puntosA; i++)
+	{
+		Console::SetCursorPosition(MARCO_IZQUIERDA_TABLERO + i * 2 , MARCO_ARRIBA_TABLERO - 3);
+		printf("%c", CARACTER_FICHA);
+
+	}
+	//fichas comidas por B
+	Console::ForegroundColor = COLOR_FICHA_A;
+	for (int i = 0; i < puntosB; i++)
+	{
+		Console::SetCursorPosition(MARCO_IZQUIERDA_TABLERO + i * 2, MARCO_ARRIBA_TABLERO - 2);
+		printf("%c", CARACTER_FICHA);
+	}
+
 }
