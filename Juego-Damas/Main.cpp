@@ -41,15 +41,17 @@ void borrarTexto();
 bool puedeMover(int, int, int, int, bool &);
 bool estaEnDiagonal(int, int, int, int);
 void mensajes(int);
-void comerFichas(int, int, int, int);
+void comerFichas(int, int, int, int, int&, int&);
 bool estaEnNegro(int, int);
 void cambiarTurno(char&);
 void mostrarTurno(char, string, string);
 void pedirDatos(string&, string&);
+bool quedanMovimientos();
 
 struct ficha {
 	bool existe = false;
 	char tipo;
+	bool dama = false;
 };
 
 ficha** fichas;
@@ -80,14 +82,14 @@ void inisializarFichas() {
 	}
 }
 
-bool moverFicha(int x, int y, int xNuevo, int yNuevo)
+bool moverFicha(int x, int y, int xNuevo, int yNuevo, int &comidasA, int &comidasB)
 {
 	bool come = false;
 	if (puedeMover(x, y, xNuevo, yNuevo, come))
 	{
 		if (come)
 		{
-			comerFichas(x, y, xNuevo, yNuevo);
+			comerFichas(x, y, xNuevo, yNuevo, comidasA, comidasB);
 		}
 		Console::SetCursorPosition(MARCO_IZQUIERDA_TABLERO + x * 5 + 2,
 			MARCO_ARRIBA_TABLERO + (y + 1) * 2);
@@ -95,6 +97,10 @@ bool moverFicha(int x, int y, int xNuevo, int yNuevo)
 		printf(" ");
 		fichas[yNuevo][xNuevo] = fichas[y][x];
 		fichas[y][x].existe = false;
+		if (yNuevo == 0 || yNuevo == LADO_TABLERO - 1)
+		{
+			fichas[yNuevo][xNuevo].dama = true;
+		}
 		return true;
 	}
 	else
@@ -209,6 +215,10 @@ void iniciarPartida()
 
 	char turnoJugador = 'A';
 
+	
+	int puntosA = 0; //piezas B comidas
+	int puntosB = 0; //piezas A comidas
+
 	int x, y;
 	int xNuevo, yNuevo;
 	Console::Clear();
@@ -218,6 +228,8 @@ void iniciarPartida()
 	pedirDatos(jugadorA, jugadroB);
 	inisializarFichas();
 
+	bool gameOver = false;
+
 	do {
 		mostrarTurno(turnoJugador, jugadorA, jugadroB);
 		dibujarFichas();
@@ -226,14 +238,19 @@ void iniciarPartida()
 		{
 			borrarTexto();
 			ubicarCoordenada(xNuevo, yNuevo);
-			if(!moverFicha(x, y, xNuevo, yNuevo))
+			if(!moverFicha(x, y, xNuevo, yNuevo, puntosA, puntosB))
 				mensajes(2);
-			else
+			else {
 				cambiarTurno(turnoJugador);
+				if (puntosA == 12 || puntosB == 12 || !quedanMovimientos())
+				{
+					gameOver = true;
+				}
+			}
 		}
 		else
 			mensajes(1);
-	} while (x != 0 || y != 0);
+	} while (!gameOver);
 	_getch();
 }
 
@@ -344,27 +361,31 @@ bool puedeMover(int x, int y, int xNuevo, int yNuevo, bool &come)
 	switch (fichas[y][x].tipo)
 	{
 	case 'A':
-
-			if (xNuevo < x && fichas[y + 1][x - 1].existe && fichas[y + 1][x - 1].tipo == 'B')
+		if (y+1< LADO_TABLERO)
+		{
+			if (x - 1 >= 0 && xNuevo < x && fichas[y + 1][x - 1].existe && fichas[y + 1][x - 1].tipo == 'B')
 				come = true;
-			else if (xNuevo > x && fichas[y + 1][x + 1].existe && fichas[y + 1][x + 1].tipo == 'B')
+			else if (x + 1 < LADO_TABLERO && xNuevo > x && fichas[y + 1][x + 1].existe && fichas[y + 1][x + 1].tipo == 'B')
 				come = true;
 			else
 				come = false;
-			
-		mueveUno = yNuevo - y == 1;
-		break;
+
+			mueveUno = yNuevo - y == 1;
+			break;
+		}
+
 	case 'B':
-
-			if (xNuevo < x && fichas[y - 1][x - 1].existe && fichas[y - 1][x - 1].tipo == 'A')
+		if (y - 1 >= 0) {
+			if (x-1>=0&&xNuevo < x && fichas[y - 1][x - 1].existe && fichas[y - 1][x - 1].tipo == 'A')
 				come = true;
-			else if (xNuevo > x && fichas[y - 1][x + 1].existe && fichas[y - 1][x + 1].tipo == 'A')
+			else if (x + 1 < LADO_TABLERO && xNuevo > x && fichas[y - 1][x + 1].existe && fichas[y - 1][x + 1].tipo == 'A')
 				come = true;
 			else
 				come = false;
 
-		mueveUno = y - yNuevo == come ? 2 : 1;
-		break;
+			mueveUno = y - yNuevo == 1;
+			break;
+		}
 	}
 
 	if (come)
@@ -430,23 +451,37 @@ void mostrarTurno(char turnoJugador, string jugadorA, string jugadorB)
 	}
 }
 
-void comerFichas(int x, int y, int xNuevo, int yNuevo)
-{
+void comerFichas(int x, int y, int xNuevo, int yNuevo, int &puntosA, int &puntosB)
+{	
+	ficha f;
 
 		if (fichas[y][x].tipo == 'A')
 		{
-			if (xNuevo < x)
+			if (xNuevo < x) {
 				fichas[y + 1][x - 1].existe = false;
-			else if (xNuevo > x)
+				f = fichas[y + 1][x - 1];
+			}
+			else if (xNuevo > x) {
 				fichas[y + 1][x + 1].existe = false;
+				f = fichas[y + 1][x + 1];
+			}
 		}
 		else
 		{
-			if (xNuevo < x)
+			if (xNuevo < x) {
 				fichas[y - 1][x - 1].existe = false;
-			else if (xNuevo > x)
+				f = fichas[y - 1][x - 1];
+			}
+			else if (xNuevo > x) {
 				fichas[y - 1][x + 1].existe = false;
+				f = fichas[y - 1][x + 1];
+			}
 		}
+		if (f.tipo == 'A')
+			puntosA++;
+
+		else
+			puntosB++;
 		
 }
 
@@ -474,4 +509,27 @@ void pedirDatos(string &jugadorA, string &jugadorB)
 	Console::SetCursorPosition(60, 6);
 	cin >> jugadorB;
 	borrarTexto();
+}
+
+bool quedanMovimientos()
+{
+	//TODO 
+	bool quedan = true;
+	for (int i = 0; i < LADO_TABLERO; i++)
+	{
+		for (int j = i % 2 == 0 ? 1 : 0; j < 8; j += 2)
+		{
+			if ((j + 1 < LADO_TABLERO && fichas[j][i].tipo == 'A') || 
+				(j - 1 >= 0 && fichas[j][i].tipo == 'B'))
+			{
+				quedan = true;
+			}
+			else if ((j + 2 < LADO_TABLERO && fichas[j][i].tipo == 'A' && fichas[j][i].tipo == 'B') ||
+				(j - 2 >= 0 && fichas[j][i].tipo == 'B' && fichas[j][i].tipo == 'A'))
+			{
+				quedan = true;
+			}
+		}
+	}
+	return quedan;
 }
