@@ -35,14 +35,17 @@ void ubicarCoordenada(int&, int&);
 void iniciarPartida();
 void moverFlechitasTablero(int&, int&);
 void inisializarFichas();
-void moverFicha(int, int, int, int);
+bool moverFicha(int, int, int, int);
 void dibujarFichas();
 void borrarTexto();
 bool puedeMover(int, int, int, int, bool &);
 bool estaEnDiagonal(int, int, int, int);
-void mensajesDeError(int);
+void mensajes(int);
 void comerFichas(int, int, int, int);
 bool estaEnNegro(int, int);
+void cambiarTurno(char&);
+void mostrarTurno(char, string, string);
+void pedirDatos(string&, string&);
 
 struct ficha {
 	bool existe = false;
@@ -77,7 +80,7 @@ void inisializarFichas() {
 	}
 }
 
-void moverFicha(int x, int y, int xNuevo, int yNuevo)
+bool moverFicha(int x, int y, int xNuevo, int yNuevo)
 {
 	bool come = false;
 	if (puedeMover(x, y, xNuevo, yNuevo, come))
@@ -92,9 +95,10 @@ void moverFicha(int x, int y, int xNuevo, int yNuevo)
 		printf(" ");
 		fichas[yNuevo][xNuevo] = fichas[y][x];
 		fichas[y][x].existe = false;
+		return true;
 	}
 	else
-		mensajesDeError(2);
+		return false;
 }
 
 void dibujarFichas()
@@ -202,29 +206,44 @@ void moverFlechitaMenu(int& opcion)
 
 void iniciarPartida()
 {
+
+	char turnoJugador = 'A';
+
 	int x, y;
 	int xNuevo, yNuevo;
 	Console::Clear();
 	dibujarMapa();
+	string jugadorA;
+	string jugadroB;
+	pedirDatos(jugadorA, jugadroB);
 	inisializarFichas();
-	
+
 	do {
+		mostrarTurno(turnoJugador, jugadorA, jugadroB);
 		dibujarFichas();
 		ubicarCoordenada(x, y);
-		if (!fichas[y][x].existe)
+		if (fichas[y][x].existe && fichas[y][x].tipo == turnoJugador)
 		{
-			mensajesDeError(1);
-			continue;
+			borrarTexto();
+			ubicarCoordenada(xNuevo, yNuevo);
+			if(!moverFicha(x, y, xNuevo, yNuevo))
+				mensajes(2);
+			else
+				cambiarTurno(turnoJugador);
 		}
 		else
-			borrarTexto();
-		ubicarCoordenada(xNuevo, yNuevo);
-		moverFicha(x, y, xNuevo, yNuevo);
+			mensajes(1);
 	} while (x != 0 || y != 0);
 	_getch();
 }
 
-
+void cambiarTurno(char& turnoJugador)
+{
+	if (turnoJugador == 'A')
+		turnoJugador = 'B';
+	else
+		turnoJugador = 'A';
+}
 
 void dibujarMapa()
 {
@@ -310,10 +329,11 @@ void moverFlechitasTablero(int& x, int& y)
 }
 void borrarTexto()
 {
+	Console::BackgroundColor = ConsoleColor::Black;
 	for (int i = 0; i < 6; i++)
 	{
-		Console::SetCursorPosition(60, 6 + i);
-		printf("                                         ");
+		Console::SetCursorPosition(60, 5 + i);
+		printf("                                            ");
 	}
 	
 }
@@ -324,45 +344,40 @@ bool puedeMover(int x, int y, int xNuevo, int yNuevo, bool &come)
 	switch (fichas[y][x].tipo)
 	{
 	case 'A':
-		for (int i = 1; i < abs(yNuevo - y); i++)
-		{
-			if (xNuevo < x && fichas[y + i][x - i].existe && fichas[y + i][x - i].tipo == 'B')
+
+			if (xNuevo < x && fichas[y + 1][x - 1].existe && fichas[y + 1][x - 1].tipo == 'B')
 				come = true;
-			else if (xNuevo > x && fichas[y + i][x + i].existe && fichas[y + i][x + i].tipo == 'B')
+			else if (xNuevo > x && fichas[y + 1][x + 1].existe && fichas[y + 1][x + 1].tipo == 'B')
 				come = true;
 			else
-			{
 				come = false;
-				break;
-			}
-		}
+			
 		mueveUno = yNuevo - y == 1;
 		break;
 	case 'B':
-		for (int i = 1; i < abs(yNuevo - y); i++)
-		{
-			if (xNuevo < x && fichas[y - i][x - i].existe && fichas[y - i][x - i].tipo == 'A')
+
+			if (xNuevo < x && fichas[y - 1][x - 1].existe && fichas[y - 1][x - 1].tipo == 'A')
 				come = true;
-			else if (xNuevo > x && fichas[y - i][x + i].existe && fichas[y - i][x + i].tipo == 'A')
+			else if (xNuevo > x && fichas[y - 1][x + 1].existe && fichas[y - 1][x + 1].tipo == 'A')
 				come = true;
 			else
-			{
 				come = false;
-				break;
-			}
-		}
-		mueveUno = y - yNuevo == 1;
+
+		mueveUno = y - yNuevo == come ? 2 : 1;
 		break;
 	}
+
+	if (come)
+		mueveUno = abs(yNuevo - y) == 2;
 
 	if (fichas[yNuevo][xNuevo].existe || !estaEnNegro(xNuevo, yNuevo))
 	{
 		//No se puede mover a esa posicion
-		mensajesDeError(2);
+		mensajes(2);
 		return false;
 	}
 	Console::SetCursorPosition(65, 14);
-	return estaEnDiagonal(x, y, xNuevo, yNuevo) && (mueveUno || come);
+	return estaEnDiagonal(x, y, xNuevo, yNuevo) && mueveUno;
 }
 
 bool estaEnDiagonal(int x, int y, int xNuevo, int yNuevo)
@@ -370,7 +385,7 @@ bool estaEnDiagonal(int x, int y, int xNuevo, int yNuevo)
 	bool esDiag = abs(x - xNuevo) == abs(y - yNuevo);
 	return esDiag;
 }
-void mensajesDeError(int tipo)
+void mensajes(int tipo)
 {
 	borrarTexto();
 	Console::ForegroundColor = COLOR_FICHA_A;
@@ -379,7 +394,7 @@ void mensajesDeError(int tipo)
 	{
 	case 1:
 		Console::SetCursorPosition(60,7);
-		printf("NO EXISTE NINGUNA FICHA EN ESA POSICION");
+		printf("NO PUEDE SELECCIONAR ESA POSICION");
 		Console::SetCursorPosition(60,8);
 		printf("INTENTE OTRA VEZ");
 		break;
@@ -400,28 +415,39 @@ void mensajesDeError(int tipo)
 	}
 	
 }
+void mostrarTurno(char turnoJugador, string jugadorA, string jugadorB)
+{
+	switch (turnoJugador)
+	{
+	case 'A':
+		Console::SetCursorPosition(60, 5);
+		cout << "turno del jugador " << jugadorA << " (blancas)";
+		break;
+	case 'B':
+		Console::SetCursorPosition(60, 5);
+		cout << "turno del jugador " << jugadorB << " (rojas)";
+		break;
+	}
+}
 
 void comerFichas(int x, int y, int xNuevo, int yNuevo)
 {
-	for (int i = 1; i < abs(yNuevo - y); i++)
-	{
+
 		if (fichas[y][x].tipo == 'A')
 		{
 			if (xNuevo < x)
-				fichas[y + i][x - i].existe = false;
+				fichas[y + 1][x - 1].existe = false;
 			else if (xNuevo > x)
-				fichas[y + i][x + i].existe = false;
+				fichas[y + 1][x + 1].existe = false;
 		}
 		else
 		{
 			if (xNuevo < x)
-				fichas[y - i][x - i].existe = false;
+				fichas[y - 1][x - 1].existe = false;
 			else if (xNuevo > x)
-				fichas[y - i][x + i].existe = false;
+				fichas[y - 1][x + 1].existe = false;
 		}
 		
-
-	}
 }
 
 bool estaEnNegro(int x, int y)
@@ -432,4 +458,20 @@ bool estaEnNegro(int x, int y)
 	else
 		estaNegro = x % 2 == 0;
 	return estaNegro;
+}
+void pedirDatos(string &jugadorA, string &jugadorB)
+{
+	borrarTexto();
+	Console::BackgroundColor = ConsoleColor::Black;
+	Console::ForegroundColor = COLOR_FICHA_A;
+	Console::SetCursorPosition(60, 5);
+	cout << "Jugador A (blancas) ingrese su nombre : \n";
+	Console::SetCursorPosition(60, 6);	
+	cin >> jugadorA;
+	borrarTexto();
+	Console::SetCursorPosition(60, 5);
+	cout << "Jugador B (Rojas) ingrese su nombre : \n";
+	Console::SetCursorPosition(60, 6);
+	cin >> jugadorB;
+	borrarTexto();
 }
