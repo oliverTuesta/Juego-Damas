@@ -16,6 +16,7 @@ const int FLECHA_DERECHA = 16;
 const int FLECHA_ARRIBA = 94;
 const int FLECHA_IZQUIERDA = 60;
 const int CARACTER_FICHA = 'o';
+const int CARACTER_FICHA_DAMA = 'O';
 
 const int PRIMERA_OPCION_MENU = 0;
 const int ULTIMA_OPCION_MENU = 2;
@@ -127,7 +128,11 @@ void dibujarFichas()
 					break;
 				}
 
-				printf("%c", CARACTER_FICHA);
+				if (f.dama)
+					printf("%c", CARACTER_FICHA_DAMA);
+				
+				else
+					printf("%c", CARACTER_FICHA);
 			}
 			else if(estaEnNegro(j, i))
 				printf(" ");
@@ -140,7 +145,7 @@ void dibujarFichas()
 
 int main()
 {
-
+	Console::SetWindowSize(110, 30);
 	menu();
 	return 0;
 }
@@ -325,7 +330,6 @@ void moverFlechitasTablero(int& x, int& y)
 		case DERECHA:
 			if (x < 8 - 1) 
 				x++;
-			
 			break;
 		case IZQUIERDA:
 			if (x > 0) 
@@ -358,50 +362,86 @@ void borrarTexto()
 	
 }
 
+bool movimientoDamaValido(int x, int y, int xNuevo, int yNuevo, bool& come)
+{
+	int fichasEnRango = 0;
+	
+	int xAux, yAux;
+	xAux = x;
+	yAux = y;
+	for (int i = 0; i < abs(y-yNuevo); i++)
+	{
+		if (xNuevo >= x)
+			xAux++;
+		else
+			xAux--;
+		
+		if (yNuevo >= y)
+			yAux++;
+		else
+			yAux--;
+
+		fichasEnRango += fichas[yAux][xAux].existe;
+	}
+	
+
+		Console::SetCursorPosition(0, 0);
+		cout << fichasEnRango;
+	come = fichasEnRango == 1;
+	return fichasEnRango == 0 || fichasEnRango == 1;
+}
+
 bool puedeMover(int x, int y, int xNuevo, int yNuevo, bool &come)
 {
-	bool mueveUno = false;
-	switch (fichas[y][x].tipo)
+	if (fichas[y][x].dama)
 	{
-	case 'A':
-		if (y+1< LADO_TABLERO)
+		return !fichas[yNuevo][xNuevo].existe && estaEnNegro(xNuevo, yNuevo) &&
+			estaEnDiagonal(x, y, xNuevo, yNuevo) && movimientoDamaValido(x, y, xNuevo, yNuevo, come);
+	}
+	else {
+		bool movimientoValido = false;
+		switch (fichas[y][x].tipo)
 		{
-			if (x - 1 >= 0 && xNuevo < x && fichas[y + 1][x - 1].existe && fichas[y + 1][x - 1].tipo == 'B')
-				come = true;
-			else if (x + 1 < LADO_TABLERO && xNuevo > x && fichas[y + 1][x + 1].existe && fichas[y + 1][x + 1].tipo == 'B')
-				come = true;
-			else
-				come = false;
+		case 'A':
+			if (y + 1 < LADO_TABLERO)
+			{
+				if (x - 1 >= 0 && xNuevo < x && fichas[y + 1][x - 1].existe && fichas[y + 1][x - 1].tipo == 'B')
+					come = true;
+				else if (x + 1 < LADO_TABLERO && xNuevo > x && fichas[y + 1][x + 1].existe && fichas[y + 1][x + 1].tipo == 'B')
+					come = true;
+				else
+					come = false;
 
-			mueveUno = yNuevo - y == 1;
-			break;
+				movimientoValido = yNuevo - y == 1;
+				break;
+			}
+
+		case 'B':
+			if (y - 1 >= 0) {
+				if (x - 1 >= 0 && xNuevo < x && fichas[y - 1][x - 1].existe && fichas[y - 1][x - 1].tipo == 'A')
+					come = true;
+				else if (x + 1 < LADO_TABLERO && xNuevo > x && fichas[y - 1][x + 1].existe && fichas[y - 1][x + 1].tipo == 'A')
+					come = true;
+				else
+					come = false;
+
+				movimientoValido = y - yNuevo == 1;
+				break;
+			}
 		}
 
-	case 'B':
-		if (y - 1 >= 0) {
-			if (x-1>=0&&xNuevo < x && fichas[y - 1][x - 1].existe && fichas[y - 1][x - 1].tipo == 'A')
-				come = true;
-			else if (x + 1 < LADO_TABLERO && xNuevo > x && fichas[y - 1][x + 1].existe && fichas[y - 1][x + 1].tipo == 'A')
-				come = true;
-			else
-				come = false;
+		if (come)
+			movimientoValido = abs(yNuevo - y) == 2;
 
-			mueveUno = y - yNuevo == 1;
-			break;
+		if (fichas[yNuevo][xNuevo].existe || !estaEnNegro(xNuevo, yNuevo))
+		{
+			//No se puede mover a esa posicion
+			mensajes(2);
+			return false;
 		}
+		Console::SetCursorPosition(65, 14);
+		return estaEnDiagonal(x, y, xNuevo, yNuevo) && movimientoValido;
 	}
-
-	if (come)
-		mueveUno = abs(yNuevo - y) == 2;
-
-	if (fichas[yNuevo][xNuevo].existe || !estaEnNegro(xNuevo, yNuevo))
-	{
-		//No se puede mover a esa posicion
-		mensajes(2);
-		return false;
-	}
-	Console::SetCursorPosition(65, 14);
-	return estaEnDiagonal(x, y, xNuevo, yNuevo) && mueveUno;
 }
 
 bool estaEnDiagonal(int x, int y, int xNuevo, int yNuevo)
@@ -457,7 +497,36 @@ void mostrarTurno(char turnoJugador, string jugadorA, string jugadorB)
 void comerFichas(int x, int y, int xNuevo, int yNuevo, int &puntosA, int &puntosB)
 {	
 	ficha f;
+	if (fichas[y][x].dama)
+	{
+		int xAux, yAux;
+		xAux = x;
+		yAux = y;
+		for (int i = 0; i < abs(y - yNuevo); i++)
+		{
+			if (xNuevo >= x)
+				xAux++;
+			else
+				xAux--;
 
+			if (yNuevo >= y)
+				yAux++;
+			else
+				yAux--;
+
+			if (fichas[yAux][xAux].existe)
+			{
+				if (fichas[yAux][xAux].tipo == 'A')
+					puntosB++;
+				
+				else
+					puntosA++;
+
+				fichas[yAux][xAux].existe = false;
+			}
+		}
+	}
+	else {
 		if (fichas[y][x].tipo == 'A')
 		{
 			if (xNuevo < x) {
@@ -482,6 +551,7 @@ void comerFichas(int x, int y, int xNuevo, int yNuevo, int &puntosA, int &puntos
 			}
 			puntosB++;
 		}
+	}
 		
 }
 
