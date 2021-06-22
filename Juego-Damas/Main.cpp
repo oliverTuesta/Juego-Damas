@@ -90,7 +90,7 @@ void menu()
 			iniciarPartida();
 			break;
 		case 1:
-			//creditos
+			//creditos Luis
 			break;
 		}
 
