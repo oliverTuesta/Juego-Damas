@@ -58,6 +58,45 @@ struct ficha {
 
 ficha** fichas;
 
+
+int main()
+{
+	Console::SetWindowSize(110, 30);
+	menu();
+	return 0;
+}
+
+void menu()
+{
+	int opcion = 0;
+	do {
+		Console::Clear();
+		Console::BackgroundColor = ConsoleColor::Black;
+		Console::SetCursorPosition(10, 1);
+		printf("\t******************************* DAMAS *******************************\n");
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 6);
+		printf("Nueva partida");
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 8);
+		printf("Creditos");
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 10);
+		printf("Salir");
+
+		moverFlechitaMenu(opcion);
+
+		switch (opcion)
+		{
+		case 0:
+			//iniciar juego
+			iniciarPartida();
+			break;
+		case 1:
+			//creditos
+			break;
+		}
+
+	} while (opcion != ULTIMA_OPCION_MENU);
+}
+
 void inisializarFichas() {
 	fichas = new ficha* [LADO_TABLERO];
 
@@ -141,44 +180,6 @@ void dibujarFichas()
 		
 	}
 	
-}
-
-int main()
-{
-	Console::SetWindowSize(110, 30);
-	menu();
-	return 0;
-}
-
-void menu()
-{	
-	int opcion = 0;
-	do {
-		Console::Clear();
-		Console::BackgroundColor = ConsoleColor::Black;
-		Console::SetCursorPosition(10, 1);
-		printf("\t******************************* DAMAS *******************************\n");
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 6);
-		printf("Nueva partida");
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 8);
-		printf("Creditos");
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 10);
-		printf("Salir");
-		
-		moverFlechitaMenu(opcion);
-
-		switch (opcion)
-		{
-		case 0:
-		//iniciar juego
-			iniciarPartida();
-			break;
-		case 1:
-			//creditos
-			break;
-		}
-
-	} while (opcion != ULTIMA_OPCION_MENU);
 }
 
 void moverFlechitaMenu(int& opcion)
