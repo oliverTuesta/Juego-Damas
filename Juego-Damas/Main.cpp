@@ -217,7 +217,6 @@ void iniciarPartida()
 {
 
 	char turnoJugador = 'A';
-
 	
 	int puntosA = 0; //piezas B comidas
 	int puntosB = 0; //piezas A comidas
