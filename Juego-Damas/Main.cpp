@@ -79,7 +79,7 @@ void menu()
 		Console::ForegroundColor = ConsoleColor::Magenta;
 		printf("Nueva partida");
 		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 8);
-		Console::ForegroundColor = ConsoleColor::Magenta;
+		Console::ForegroundColor = ConsoleColor::Yellow;
 		printf("Creditos");
 		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 10);
 		Console::ForegroundColor = ConsoleColor::Red;
