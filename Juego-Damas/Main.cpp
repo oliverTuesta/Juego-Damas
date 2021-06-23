@@ -79,13 +79,8 @@ void menu()
 		Console::Clear();
 		Console::BackgroundColor = ConsoleColor::Black;
 		Console::SetCursorPosition(10, 1);
+		Console::ForegroundColor = ConsoleColor::Cyan;
 		printf("\t******************************* DAMAS *******************************\n");
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 6);
-		printf("Nueva partida");
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 8);
-		printf("Creditos");
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 10);
-		printf("Salir");
 
 		moverFlechitaMenu(opcion);
 
@@ -261,7 +256,39 @@ void moverFlechitaMenu(int& opcion)
 	do {
 		int anterior = opcion;
 		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU - 1, 6 + opcion * 2);
+		Console::ForegroundColor = ConsoleColor::DarkYellow;
 		printf("%c", FLECHA_DERECHA);
+
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 6);
+		if (opcion == 0)
+		{
+			Console::ForegroundColor = ConsoleColor::White;
+		}
+		else
+		{
+			Console::ForegroundColor = ConsoleColor::Magenta;
+		}
+		printf("Nueva partida");
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 8);
+		if (opcion == 1)
+		{
+			Console::ForegroundColor = ConsoleColor::White;
+		}
+		else
+		{
+			Console::ForegroundColor = ConsoleColor::DarkGray;
+		}
+		printf("Creditos");
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 10);
+		if (opcion == 2)
+		{
+			Console::ForegroundColor = ConsoleColor::White;
+		}
+		else
+		{
+			Console::ForegroundColor = ConsoleColor::Red;
+		}
+		printf("Salir");
 
 		tecla = getch();
 
@@ -298,6 +325,7 @@ void iniciarPartida()
 	int x, y;
 	x = y = 0;
 	int xNuevo, yNuevo;
+	xNuevo = yNuevo = 0;
 	Console::Clear();
 	dibujarMapa();
 	string jugadorA;
@@ -543,7 +571,7 @@ void mensajes(int tipo)
 		break;
 	case 3:
 		Console::SetCursorPosition(60, 14);
-		printf("Come");
+		printf("Comete esta");
 		Console::SetCursorPosition(60, 8);
 		printf("INTENTE OTRA VEZ");
 		break;
