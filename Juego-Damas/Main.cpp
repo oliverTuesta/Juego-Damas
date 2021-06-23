@@ -49,6 +49,10 @@ void mostrarTurno(char, string, string);
 void pedirDatos(string&, string&);
 bool quedanMovimientos();
 void dibujarFichasComidas(int, int);
+void creditos();
+void texto();
+void graficos();
+void graficos2();
 
 struct ficha {
 	bool existe = false;
@@ -94,11 +98,76 @@ void menu()
 			iniciarPartida();
 			break;
 		case 1:
-			//creditos Luis
+			creditos();
 			break;
 		}
-
 	} while (opcion != ULTIMA_OPCION_MENU);
+}
+
+void creditos() {
+	Console::Clear();
+	Console::SetWindowSize(110, 30);
+	bool salir = false;
+	char tecla = 0;
+	do
+	{
+		if (salir == false) {
+			graficos();
+			texto();
+			graficos2();
+			tecla = getch();
+			if (tecla != 0) {
+				salir = true;
+			}
+		}
+	} while (salir == false);
+}
+
+void texto() {
+	Console::BackgroundColor = ConsoleColor::Black;
+	Console::SetCursorPosition(47, 4);
+	cout << "Akkadia Studios";
+	Console::BackgroundColor = ConsoleColor::Black;
+	Console::SetCursorPosition(49, 10);
+	cout << "Creadores:";
+	Console::BackgroundColor = ConsoleColor::Black;
+	Console::SetCursorPosition(49, 15);
+	cout << "Luis Maco";
+	Console::BackgroundColor = ConsoleColor::Black;
+	Console::SetCursorPosition(47, 16);
+	cout << "Oliver Tuesta";
+	Console::BackgroundColor = ConsoleColor::Black;
+	Console::SetCursorPosition(49, 17);
+	cout << "Brian Díaz";
+	Console::BackgroundColor = ConsoleColor::Black;
+	Console::SetCursorPosition(35, 26);
+	cout << "Presione cualquier tecla para volver...";
+	//madebypapichulo
+}
+
+void graficos() {
+	for (int i = 0; i < 30; i++) {
+		for (int j = 0; j < 25; j++) {
+			Console::BackgroundColor = ConsoleColor::White;
+
+			cout << " ";
+
+		}
+		cout << endl;
+	}
+	Console::BackgroundColor = ConsoleColor::Black;
+}
+
+void graficos2() {
+	for (int i = 0; i < 25; i++) {
+		for (int j = 0; j < 30; j++) {
+			Console::BackgroundColor = ConsoleColor::White;
+			Console::SetCursorPosition(85 + i, 0 + j);
+			cout << " ";
+		}
+		cout << endl;
+	}
+	Console::BackgroundColor = ConsoleColor::Black;
 }
 
 void inisializarFichas() {
