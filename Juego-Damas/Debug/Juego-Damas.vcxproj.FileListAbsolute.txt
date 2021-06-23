@@ -1,1 +1,2 @@
 C:\Users\olive\Documents\UPC\programacion\Trabajo final\Juego-Damas\Juego-Damas\Debug\Juego-Damas.vcxproj.AssemblyReference.cache
+C:\Users\Luis Maco\Desktop\Programming\trabajofinal\Juego-Damas\Juego-Damas\Debug\Juego-Damas.vcxproj.AssemblyReference.cache

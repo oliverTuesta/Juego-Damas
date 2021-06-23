@@ -24,6 +24,7 @@ const int ULTIMA_OPCION_MENU = 2;
 const int MARCO_IZQUIERDA_MENU = 45;
 const int MARCO_IZQUIERDA_TABLERO = 10;
 const int MARCO_ARRIBA_TABLERO = 5;
+const int MARCO_ARRIBA_MENU = 14;
 
 const ConsoleColor COLOR_FICHA_B = ConsoleColor::Red;
 const ConsoleColor COLOR_FICHA_A = ConsoleColor::White;
@@ -256,10 +257,10 @@ void moverFlechitaMenu(int& opcion)
 	char tecla;
 	do {
 		int anterior = opcion;
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU - 1, 10 + opcion * 2);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU - 1, MARCO_ARRIBA_MENU + opcion * 2);
 		printf("%c", FLECHA_DERECHA);
 
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 10);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, MARCO_ARRIBA_MENU);
 		if (opcion == 0)
 		{
 			Console::ForegroundColor = ConsoleColor::White;
@@ -269,7 +270,7 @@ void moverFlechitaMenu(int& opcion)
 			Console::ForegroundColor = ConsoleColor::Magenta;
 		}
 		printf("\tNueva partida");
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 12);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, MARCO_ARRIBA_MENU + 2);
 		if (opcion == 1)
 		{
 			Console::ForegroundColor = ConsoleColor::White;
@@ -279,7 +280,7 @@ void moverFlechitaMenu(int& opcion)
 			Console::ForegroundColor = ConsoleColor::DarkGray;
 		}
 		printf("\tCreditos");
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 14);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, MARCO_ARRIBA_MENU + 4);
 		if (opcion == 2)
 		{
 			Console::ForegroundColor = ConsoleColor::White;
@@ -308,7 +309,7 @@ void moverFlechitaMenu(int& opcion)
 			break;
 		}
 
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU - 1, 6 + anterior * 2);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU - 1, MARCO_ARRIBA_MENU + anterior * 2);
 		printf(" ");
 
 	} while (tecla != ENTER);
