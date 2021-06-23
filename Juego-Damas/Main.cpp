@@ -49,10 +49,12 @@ void mostrarTurno(char, string, string);
 void pedirDatos(string&, string&);
 bool quedanMovimientos();
 void dibujarFichasComidas(int, int);
+//creditos
 void creditos();
 void texto();
 void graficos();
 void graficos2();
+//fin creditos
 
 struct ficha {
 	bool existe = false;
