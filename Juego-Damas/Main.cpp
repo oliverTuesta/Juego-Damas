@@ -86,6 +86,7 @@ void menu()
 			break;
 		case 1:
 			//creditos Luis ella no te ama
+			// ya lo sabiamos
 			break;
 		}
 
