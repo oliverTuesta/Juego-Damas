@@ -78,12 +78,11 @@ void menu()
 		switch (opcion)
 		{
 		case 0:
-			//iniciar juego
+			//iniciar juego hola safdafasdfa
 			iniciarPartida();
 			break;
 		case 1:
-			//creditos Luis ella no te ama
-			// ya lo sabiamos
+			//creditos Luis
 			break;
 		}
 
@@ -181,7 +180,6 @@ void moverFlechitaMenu(int& opcion)
 	do {
 		int anterior = opcion;
 		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU - 1, 6 + opcion * 2);
-		Console::ForegroundColor = ConsoleColor::DarkYellow;
 		printf("%c", FLECHA_DERECHA);
 
 		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 6);
@@ -255,7 +253,6 @@ void iniciarPartida()
 	int x, y;
 	x = y = 0;
 	int xNuevo, yNuevo;
-	xNuevo = yNuevo = 0;
 	Console::Clear();
 	dibujarMapa();
 	string jugadorA;
@@ -501,7 +498,7 @@ void mensajes(int tipo)
 		break;
 	case 3:
 		Console::SetCursorPosition(60, 14);
-		printf("Comete esta");
+		printf("Come");
 		Console::SetCursorPosition(60, 8);
 		printf("INTENTE OTRA VEZ");
 		break;
