@@ -74,10 +74,14 @@ int main()
 
 void menu()
 {
+
 	int opcion = 0;
 	do {
 		Console::Clear();
 		Console::BackgroundColor = ConsoleColor::Black;
+		Console::SetCursorPosition(10, 1);
+		Console::ForegroundColor = ConsoleColor::Cyan;
+		printf("\t\t\t  ______   _______  _______  _______  _______ \n\t\t\t\t (  __  ) (  ___  )(       )(  ___  )(  ____ )\n\t\t\t\t | (  )  )| (   ) || () () || (   ) || (    )/\n\t\t\t\t | |   ) || (___) || || || || (___) || (_____ \n\t\t\t\t | |   | ||  ___  || |(_)| ||  ___  |(_____  )\n\t\t\t\t | |   ) || (   ) || |   | || (   ) |      ) |\n\t\t\t\t | (__/  )| )   ( || )   ( || )   ( |/)____) |\n\t\t\t\t (______/ |/     (||/     (||/     (|(_______)\n");
 
 		moverFlechitaMenu(opcion);
 
@@ -252,10 +256,10 @@ void moverFlechitaMenu(int& opcion)
 	char tecla;
 	do {
 		int anterior = opcion;
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU - 1, 6 + opcion * 2);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU - 1, 10 + opcion * 2);
 		printf("%c", FLECHA_DERECHA);
 
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 6);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 10);
 		if (opcion == 0)
 		{
 			Console::ForegroundColor = ConsoleColor::White;
@@ -265,7 +269,7 @@ void moverFlechitaMenu(int& opcion)
 			Console::ForegroundColor = ConsoleColor::Magenta;
 		}
 		printf("\tNueva partida");
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 8);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 12);
 		if (opcion == 1)
 		{
 			Console::ForegroundColor = ConsoleColor::White;
@@ -275,7 +279,7 @@ void moverFlechitaMenu(int& opcion)
 			Console::ForegroundColor = ConsoleColor::DarkGray;
 		}
 		printf("\tCreditos");
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 10);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 14);
 		if (opcion == 2)
 		{
 			Console::ForegroundColor = ConsoleColor::White;
@@ -285,11 +289,6 @@ void moverFlechitaMenu(int& opcion)
 			Console::ForegroundColor = ConsoleColor::Red;
 		}
 		printf("\tSalir\n");
-
-		Console::SetCursorPosition(10, 15);
-		Console::ForegroundColor = ConsoleColor::Cyan;
-		printf("\t\t\t  ______   _______  _______  _______  _______ \n\t\t\t\t (  __  ) (  ___  )(       )(  ___  )(  ____ )\n\t\t\t\t | (  )  )| (   ) || () () || (   ) || (    )/\n\t\t\t\t | |   ) || (___) || || || || (___) || (_____ \n\t\t\t\t | |   | ||  ___  || |(_)| ||  ___  |(_____  )\n\t\t\t\t | |   ) || (   ) || |   | || (   ) |      ) |\n\t\t\t\t | (__/  )| )   ( || )   ( || )   ( |/)____) |\n\t\t\t\t (______/ |/     (||/     (||/     (|(_______)\n");
-
 
 		tecla = getch();
 
@@ -325,7 +324,7 @@ void iniciarPartida()
 
 	int x, y;
 	x = y = 0;
-	int xNuevo, yNuevo;
+	int xNuevo = 0, yNuevo = 0;
 	Console::Clear();
 	dibujarMapa();
 	string jugadorA;
