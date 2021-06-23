@@ -78,16 +78,13 @@ void menu()
 	do {
 		Console::Clear();
 		Console::BackgroundColor = ConsoleColor::Black;
-		Console::SetCursorPosition(10, 1);
-		Console::ForegroundColor = ConsoleColor::Cyan;
-		printf("\t******************************* DAMAS *******************************\n");
 
 		moverFlechitaMenu(opcion);
 
 		switch (opcion)
 		{
 		case 0:
-			//iniciar juego
+			//iniciar juego hola safdafasdfa
 			iniciarPartida();
 			break;
 		case 1:
@@ -256,7 +253,6 @@ void moverFlechitaMenu(int& opcion)
 	do {
 		int anterior = opcion;
 		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU - 1, 6 + opcion * 2);
-		Console::ForegroundColor = ConsoleColor::DarkYellow;
 		printf("%c", FLECHA_DERECHA);
 
 		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 6);
@@ -268,7 +264,7 @@ void moverFlechitaMenu(int& opcion)
 		{
 			Console::ForegroundColor = ConsoleColor::Magenta;
 		}
-		printf("Nueva partida");
+		printf("\tNueva partida");
 		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 8);
 		if (opcion == 1)
 		{
@@ -278,7 +274,7 @@ void moverFlechitaMenu(int& opcion)
 		{
 			Console::ForegroundColor = ConsoleColor::DarkGray;
 		}
-		printf("Creditos");
+		printf("\tCreditos");
 		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 10);
 		if (opcion == 2)
 		{
@@ -288,7 +284,12 @@ void moverFlechitaMenu(int& opcion)
 		{
 			Console::ForegroundColor = ConsoleColor::Red;
 		}
-		printf("Salir");
+		printf("\tSalir\n");
+
+		Console::SetCursorPosition(10, 15);
+		Console::ForegroundColor = ConsoleColor::Cyan;
+		printf("\t\t\t  ______   _______  _______  _______  _______ \n\t\t\t\t (  __  ) (  ___  )(       )(  ___  )(  ____ )\n\t\t\t\t | (  )  )| (   ) || () () || (   ) || (    )/\n\t\t\t\t | |   ) || (___) || || || || (___) || (_____ \n\t\t\t\t | |   | ||  ___  || |(_)| ||  ___  |(_____  )\n\t\t\t\t | |   ) || (   ) || |   | || (   ) |      ) |\n\t\t\t\t | (__/  )| )   ( || )   ( || )   ( |/)____) |\n\t\t\t\t (______/ |/     (||/     (||/     (|(_______)\n");
+
 
 		tecla = getch();
 
@@ -325,7 +326,6 @@ void iniciarPartida()
 	int x, y;
 	x = y = 0;
 	int xNuevo, yNuevo;
-	xNuevo = yNuevo = 0;
 	Console::Clear();
 	dibujarMapa();
 	string jugadorA;
@@ -571,7 +571,7 @@ void mensajes(int tipo)
 		break;
 	case 3:
 		Console::SetCursorPosition(60, 14);
-		printf("Comete esta");
+		printf("Come");
 		Console::SetCursorPosition(60, 8);
 		printf("INTENTE OTRA VEZ");
 		break;
