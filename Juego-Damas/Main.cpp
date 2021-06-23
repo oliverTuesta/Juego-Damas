@@ -85,7 +85,7 @@ void menu()
 			iniciarPartida();
 			break;
 		case 1:
-			//creditos Luis
+			//creditos Luis ella no te ama
 			break;
 		}
 
