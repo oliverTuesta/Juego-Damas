@@ -75,15 +75,6 @@ void menu()
 		Console::SetCursorPosition(10, 1);
 		Console::ForegroundColor = ConsoleColor::Cyan;
 		printf("\t******************************* DAMAS *******************************\n");
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 6);
-		Console::ForegroundColor = ConsoleColor::Magenta;
-		printf("Nueva partida");
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 8);
-		Console::ForegroundColor = ConsoleColor::Yellow;
-		printf("Creditos");
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 10);
-		Console::ForegroundColor = ConsoleColor::Red;
-		printf("Salir");
 
 		moverFlechitaMenu(opcion);
 
@@ -194,6 +185,37 @@ void moverFlechitaMenu(int& opcion)
 		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU - 1, 6 + opcion * 2);
 		Console::ForegroundColor = ConsoleColor::DarkYellow;
 		printf("%c", FLECHA_DERECHA);
+
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 6);
+		if (opcion == 0)
+		{
+			Console::ForegroundColor = ConsoleColor::White;
+		}
+		else
+		{
+			Console::ForegroundColor = ConsoleColor::Magenta;
+		}
+		printf("Nueva partida");
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 8);
+		if (opcion == 1)
+		{
+			Console::ForegroundColor = ConsoleColor::White;
+		}
+		else
+		{
+			Console::ForegroundColor = ConsoleColor::DarkGray;
+		}
+		printf("Creditos");
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, 10);
+		if (opcion == 2)
+		{
+			Console::ForegroundColor = ConsoleColor::White;
+		}
+		else
+		{
+			Console::ForegroundColor = ConsoleColor::Red;
+		}
+		printf("Salir");
 
 		tecla = getch();
 
