@@ -587,7 +587,7 @@ void mensajes(int tipo)
 		graficos();
 		Console::BackgroundColor = ConsoleColor::Black;
 		Console::SetCursorPosition(47, 4);
-		cout << "Instrucciones";
+		cout << "INSTRUCCIONES";
 		Console::SetCursorPosition(26, 7);
 		cout << "Este juego es para dos personas, en el cual deberán";
 		Console::SetCursorPosition(26, 8);
