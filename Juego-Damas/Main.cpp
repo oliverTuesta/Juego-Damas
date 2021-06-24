@@ -25,6 +25,7 @@ const int MARCO_IZQUIERDA_MENU = 45;
 const int MARCO_IZQUIERDA_TABLERO = 10;
 const int MARCO_ARRIBA_TABLERO = 5;
 const int MARCO_ARRIBA_MENU = 14;
+const int MARCO_IZQUIERDA_MENSAJE = 60;
 
 const ConsoleColor COLOR_FICHA_B = ConsoleColor::Red;
 const ConsoleColor COLOR_FICHA_A = ConsoleColor::White;
@@ -50,11 +51,13 @@ void mostrarTurno(char, string, string);
 void pedirDatos(string&, string&);
 bool quedanMovimientos();
 void dibujarFichasComidas(int, int);
+//creditos
 void creditos();
 void texto();
 void graficos();
 void graficos2();
-
+//fin creditos
+void mostrarMovimientos(int, int);
 
 struct ficha {
 	bool existe = false;
@@ -319,7 +322,8 @@ void iniciarPartida()
 {
 
 	char turnoJugador = 'A';
-	
+	int movimientosA = 0;
+	int movimientosB = 0;
 	int puntosA = 0; //piezas B comidas
 	int puntosB = 0; //piezas A comidas
 
@@ -353,8 +357,14 @@ void iniciarPartida()
 				{
 					gameOver = true;
 				}
+				if (fichas[yNuevo][xNuevo].tipo == 'A')
+					movimientosA++;
+				else
+					movimientosB++;
+
+				dibujarFichasComidas(puntosA, puntosB);
+				mostrarMovimientos(movimientosA, movimientosB);
 			}
-			dibujarFichasComidas(puntosA, puntosB);
 		}
 		else
 			mensajes(1);
@@ -457,7 +467,7 @@ void borrarTexto()
 	Console::BackgroundColor = ConsoleColor::Black;
 	for (int i = 0; i < 6; i++)
 	{
-		Console::SetCursorPosition(60, 5 + i);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 5 + i);
 		printf("                                            ");
 	}
 	
@@ -482,7 +492,14 @@ bool movimientoDamaValido(int x, int y, int xNuevo, int yNuevo, bool& come)
 		else
 			yAux--;
 
-		fichasEnRango += fichas[yAux][xAux].existe;
+		if (fichas[yAux][xAux].existe)
+		{
+			fichasEnRango++;
+			if (fichas[yAux][xAux].tipo == fichas[y][x].tipo)
+				return false;
+			
+		}
+		
 	}
 	
 
@@ -558,25 +575,18 @@ void mensajes(int tipo)
 	switch (tipo)
 	{
 	case 1:
-		Console::SetCursorPosition(60,7);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE,7);
 		printf("NO PUEDE SELECCIONAR ESA POSICION");
-		Console::SetCursorPosition(60,8);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE,8);
 		printf("INTENTE OTRA VEZ");
 		break;
 	case 2:
-		Console::SetCursorPosition(60, 7);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 7);
 		printf("NO PUEDE MOVER A ESA POSICION");
-		Console::SetCursorPosition(60, 8);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 8);
 		printf("INTENTE OTRA VEZ");
 		break;
-	case 3:
-		Console::SetCursorPosition(60, 14);
-		printf("Come");
-		Console::SetCursorPosition(60, 8);
-		printf("INTENTE OTRA VEZ");
-		break;
-	default:
-		break;
+
 	}
 	
 }
@@ -585,11 +595,11 @@ void mostrarTurno(char turnoJugador, string jugadorA, string jugadorB)
 	switch (turnoJugador)
 	{
 	case 'A':
-		Console::SetCursorPosition(60, 5);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 5);
 		cout << "turno del jugador " << jugadorA << " (blancas)";
 		break;
 	case 'B':
-		Console::SetCursorPosition(60, 5);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 5);
 		cout << "turno del jugador " << jugadorB << " (rojas)";
 		break;
 	}
@@ -670,14 +680,14 @@ void pedirDatos(string &jugadorA, string &jugadorB)
 	borrarTexto();
 	Console::BackgroundColor = ConsoleColor::Black;
 	Console::ForegroundColor = COLOR_FICHA_A;
-	Console::SetCursorPosition(60, 5);
+	Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 5);
 	cout << "Jugador A (blancas) ingrese su nombre : \n";
-	Console::SetCursorPosition(60, 6);	
+	Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 6);
 	cin >> jugadorA;
 	borrarTexto();
-	Console::SetCursorPosition(60, 5);
+	Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 5);
 	cout << "Jugador B (Rojas) ingrese su nombre : \n";
-	Console::SetCursorPosition(60, 6);
+	Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 6);
 	cin >> jugadorB;
 	borrarTexto();
 }
@@ -712,7 +722,7 @@ void dibujarFichasComidas(int puntosA, int puntosB)
 	Console::ForegroundColor = COLOR_FICHA_B;
 	for (int i = 0; i < puntosA; i++)
 	{
-		Console::SetCursorPosition(MARCO_IZQUIERDA_TABLERO + i * 2 , MARCO_ARRIBA_TABLERO - 3);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE + i * 2 , 19);
 		printf("%c", CARACTER_FICHA);
 
 	}
@@ -720,8 +730,17 @@ void dibujarFichasComidas(int puntosA, int puntosB)
 	Console::ForegroundColor = COLOR_FICHA_A;
 	for (int i = 0; i < puntosB; i++)
 	{
-		Console::SetCursorPosition(MARCO_IZQUIERDA_TABLERO + i * 2, MARCO_ARRIBA_TABLERO - 2);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE + i * 2, 20);
 		printf("%c", CARACTER_FICHA);
 	}
+
+}
+
+void mostrarMovimientos(int a, int b) 
+{
+	Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 16);
+	printf("MOVIMIENTOS:");
+	Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 17);
+	printf("BLANCAS: %d  ROJAS: %d", a, b);
 
 }
