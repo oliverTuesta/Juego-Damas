@@ -51,18 +51,9 @@ void mostrarTurno(char, string, string);
 void pedirDatos(string&, string&);
 bool quedanMovimientos();
 void dibujarFichasComidas(int, int);
-//instrucciones
-void instrucciones();
 void graficos();
-void textoins();
-void graficos2();
-//creditos
-void creditos();
-void texto();
-void graficos();
-void graficos2();
-//fin creditos
 void mostrarMovimientos(int, int);
+void mostrarGanador(int, int, string, string);
 
 struct ficha {
 	bool existe = false;
@@ -101,112 +92,18 @@ void menu()
 			iniciarPartida();
 			break;
 		case 1:
-			//instrucciones Brian
-			instrucciones();
+			//instrucciones
+			mensajes(5);
 			break;
 		case 2:
-			//creditos Luis
-			creditos();
+			//creditos
+			mensajes(4);
 			break;
 		}
 
 	} while (opcion != ULTIMA_OPCION_MENU);
 }
 
-void creditos() {
-	Console::Clear();
-	Console::SetWindowSize(110, 30);
-	bool salir = false;
-	char tecla = 0;
-	do
-	{
-		if (salir == false) {
-			graficos();
-			texto();
-			graficos2();
-			tecla = getch();
-			if (tecla != 0) {
-				salir = true;
-			}
-		}
-	} while (salir == false);
-}
-
-void instrucciones() {
-	Console::Clear();
-	Console::SetWindowSize(110, 30);
-	bool salir = false;
-	char tecla = 0;
-	do
-	{
-		if (salir == false) {
-			graficos();
-			textoins();
-			graficos2();
-			tecla = getch();
-			if (tecla != 0) {
-				salir = true;
-			}
-		}
-	} while (salir == false);
-}
-
-void texto() {
-	Console::BackgroundColor = ConsoleColor::Black;
-	Console::SetCursorPosition(47, 4);
-	cout << "Akkadia Studios";
-	Console::BackgroundColor = ConsoleColor::Black;
-	Console::SetCursorPosition(49, 10);
-	cout << "Creadores:";
-	Console::BackgroundColor = ConsoleColor::Black;
-	Console::SetCursorPosition(49, 15);
-	cout << "Luis Maco";
-	Console::BackgroundColor = ConsoleColor::Black;
-	Console::SetCursorPosition(47, 16);
-	cout << "Oliver Tuesta";
-	Console::BackgroundColor = ConsoleColor::Black;
-	Console::SetCursorPosition(49, 17);
-	cout << "Brian Díaz";
-	Console::BackgroundColor = ConsoleColor::Black;
-	Console::SetCursorPosition(35, 26);
-	cout << "Presione cualquier tecla para volver...";
-	//madebypapichulo
-}
-
-void textoins() {
-	Console::BackgroundColor = ConsoleColor::Black;
-	Console::SetCursorPosition(47, 4);
-	cout << "Instrucciones";
-	Console::SetCursorPosition(26, 8);
-	cout << "el juego es bastante simple en verdad este juego es";
-	Console::SetCursorPosition(26, 9);
-	cout << "para dos personas en el cual deberan de competir por quien";
-	Console::SetCursorPosition(26, 10);
-	cout << "come mas fichas que el jugador adversario, gana quien se";
-	Console::SetCursorPosition(26, 11);
-	cout << "comio todas las fichas del otro jugador el que se quedo";
-	Console::SetCursorPosition(26, 12);
-	cout << "sin fichas, asi de simple.";
-	Console::SetCursorPosition(47, 15);
-	cout << "Jugabilidad";
-	Console::SetCursorPosition(26, 19);
-	cout << "las mecanicas explicadas de manera simplificada serian,";
-	Console::SetCursorPosition(26, 20);
-	cout << "solo puedes moverte en diagonal hacia adelante con tu";
-	Console::SetCursorPosition(26, 21);
-	cout << "ficha, una vez logras llegar al otro lado del tablero tu";
-	Console::SetCursorPosition(26, 22);
-	cout << "ficha sube de nivel y se convierte en una reina con la";
-	Console::SetCursorPosition(26, 23);
-	cout << "cual segiras moviendote en diagonal pero ahora podras";
-	Console::SetCursorPosition(26, 24);
-	cout << "hacia atras, pierde el que se queda sin fichas.";
-	Console::SetCursorPosition(26, 26);
-	cout << " Eso es todo, Buena Suerte.";
-	Console::SetCursorPosition(35, 28);
-	cout << "Presione cualquier tecla para volver...";
-	//madebypapichulo
-}
 
 void graficos() {
 	for (int i = 0; i < 30; i++) {
@@ -218,10 +115,6 @@ void graficos() {
 		}
 		cout << endl;
 	}
-	Console::BackgroundColor = ConsoleColor::Black;
-}
-
-void graficos2() {
 	for (int i = 0; i < 25; i++) {
 		for (int j = 0; j < 30; j++) {
 			Console::BackgroundColor = ConsoleColor::DarkGray;
@@ -232,7 +125,6 @@ void graficos2() {
 	}
 	Console::BackgroundColor = ConsoleColor::Black;
 }
-
 void inisializarFichas() {
 	fichas = new ficha* [LADO_TABLERO];
 
@@ -406,14 +298,14 @@ void iniciarPartida()
 	Console::Clear();
 	dibujarMapa();
 	string jugadorA;
-	string jugadroB;
-	pedirDatos(jugadorA, jugadroB);
+	string jugadorB;
+	pedirDatos(jugadorA, jugadorB);
 	inisializarFichas();
 
 	bool gameOver = false;
 
 	do {
-		mostrarTurno(turnoJugador, jugadorA, jugadroB);
+		mostrarTurno(turnoJugador, jugadorA, jugadorB);
 		dibujarFichas();
 		ubicarCoordenada(x, y);
 		if (fichas[y][x].existe && fichas[y][x].tipo == turnoJugador)
@@ -444,6 +336,7 @@ void iniciarPartida()
 		x = xNuevo;
 		y = yNuevo;
 	} while (!gameOver);
+	mostrarGanador(puntosA, puntosB, jugadorA, jugadorB);
 	_getch();
 }
 
@@ -594,6 +487,9 @@ bool puedeMover(int x, int y, int xNuevo, int yNuevo, bool &come)
 		switch (fichas[y][x].tipo)
 		{
 		case 'A':
+			if (yNuevo < y)
+				return false;
+
 			if (y + 1 < LADO_TABLERO)
 			{
 				if (x - 1 >= 0 && xNuevo < x && fichas[y + 1][x - 1].existe && fichas[y + 1][x - 1].tipo == 'B')
@@ -608,6 +504,8 @@ bool puedeMover(int x, int y, int xNuevo, int yNuevo, bool &come)
 			}
 
 		case 'B':
+			if (yNuevo > y)
+				return false;
 			if (y - 1 >= 0) {
 				if (x - 1 >= 0 && xNuevo < x && fichas[y - 1][x - 1].existe && fichas[y - 1][x - 1].tipo == 'A')
 					come = true;
@@ -659,7 +557,80 @@ void mensajes(int tipo)
 		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 8);
 		printf("INTENTE OTRA VEZ");
 		break;
-
+	case 3:
+		//creditos
+		system("cls");
+		graficos();
+		Console::BackgroundColor = ConsoleColor::Black;
+		Console::SetCursorPosition(47, 4);
+		cout << "Akkadia Studios";
+		Console::BackgroundColor = ConsoleColor::Black;
+		Console::SetCursorPosition(49, 10);
+		cout << "Creadores:";
+		Console::BackgroundColor = ConsoleColor::Black;
+		Console::SetCursorPosition(49, 15);
+		cout << "Luis Maco";
+		Console::BackgroundColor = ConsoleColor::Black;
+		Console::SetCursorPosition(47, 16);
+		cout << "Oliver Tuesta";
+		Console::BackgroundColor = ConsoleColor::Black;
+		Console::SetCursorPosition(49, 17);
+		cout << "Brian Díaz";
+		Console::BackgroundColor = ConsoleColor::Black;
+		Console::SetCursorPosition(35, 26);
+		cout << "Presione cualquier tecla para volver...";
+		_getch();
+		break;
+	case 4:
+		//Instrucciones
+		system("cls");
+		graficos();
+		Console::BackgroundColor = ConsoleColor::Black;
+		Console::SetCursorPosition(47, 4);
+		cout << "Instrucciones";
+		Console::SetCursorPosition(26, 8);
+		cout << "el juego es bastante simple en verdad este juego es";
+		Console::SetCursorPosition(26, 9);
+		cout << "para dos personas en el cual deberan de competir por quien";
+		Console::SetCursorPosition(26, 10);
+		cout << "come mas fichas que el jugador adversario, gana quien se";
+		Console::SetCursorPosition(26, 11);
+		cout << "comio todas las fichas del otro jugador el que se quedo";
+		Console::SetCursorPosition(26, 12);
+		cout << "sin fichas, asi de simple.";
+		Console::SetCursorPosition(47, 15);
+		cout << "Jugabilidad";
+		Console::SetCursorPosition(26, 19);
+		cout << "las mecanicas explicadas de manera simplificada serian,";
+		Console::SetCursorPosition(26, 20);
+		cout << "solo puedes moverte en diagonal hacia adelante con tu";
+		Console::SetCursorPosition(26, 21);
+		cout << "ficha, una vez logras llegar al otro lado del tablero tu";
+		Console::SetCursorPosition(26, 22);
+		cout << "ficha sube de nivel y se convierte en una reina con la";
+		Console::SetCursorPosition(26, 23);
+		cout << "cual segiras moviendote en diagonal pero ahora podras";
+		Console::SetCursorPosition(26, 24);
+		cout << "hacia atras, pierde el que se queda sin fichas.";
+		Console::SetCursorPosition(26, 26);
+		cout << " Eso es todo, Buena Suerte.";
+		Console::SetCursorPosition(35, 28);
+		cout << "Presione cualquier tecla para volver...";
+		_getch();
+		break;
+	case 5:
+		//EMAPATE
+		system("cls");
+		graficos();
+		Console::BackgroundColor = ConsoleColor::Black;
+		Console::SetCursorPosition(47, 4);
+		cout << "GAME OVER";
+		Console::SetCursorPosition(26, 8);
+		cout << "El jeugo a terminado en Empate";
+		Console::SetCursorPosition(35, 28);
+		cout << "Presione cualquier tecla para volver...";
+		_getch();
+		break;
 	}
 	
 }
@@ -816,4 +787,23 @@ void mostrarMovimientos(int a, int b)
 	Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 17);
 	printf("BLANCAS: %d  ROJAS: %d", a, b);
 
+}
+
+void mostrarGanador(int puntosA, int puntosB, string jugadorA, string jugadorB) 
+{
+	system("cls");
+	graficos();
+	Console::BackgroundColor = ConsoleColor::Black;
+	Console::SetCursorPosition(47, 4);
+	cout << "GAME OVER";
+	Console::SetCursorPosition(35, 8);
+	cout << "El ganador es: ";
+	if (puntosA>puntosB)
+		cout << jugadorA << " (BLANCAS)";
+	else
+		cout << jugadorB << " (ROJAS)";
+
+	Console::SetCursorPosition(35, 28);
+	cout << "Presione cualquier tecla para volver...";
+	_getch();
 }
