@@ -19,7 +19,7 @@ const int CARACTER_FICHA = 'O';
 const int CARACTER_FICHA_DAMA = '@';
 
 const int PRIMERA_OPCION_MENU = 0;
-const int ULTIMA_OPCION_MENU = 2;
+const int ULTIMA_OPCION_MENU = 3;
 
 const int MARCO_IZQUIERDA_MENU = 45;
 const int MARCO_IZQUIERDA_TABLERO = 10;
@@ -51,6 +51,11 @@ void mostrarTurno(char, string, string);
 void pedirDatos(string&, string&);
 bool quedanMovimientos();
 void dibujarFichasComidas(int, int);
+//instrucciones
+void instrucciones();
+void graficos();
+void textoins();
+void graficos2();
 //creditos
 void creditos();
 void texto();
@@ -96,6 +101,10 @@ void menu()
 			iniciarPartida();
 			break;
 		case 1:
+			//instrucciones Brian
+			instrucciones();
+			break;
+		case 2:
 			//creditos Luis
 			creditos();
 			break;
@@ -114,6 +123,25 @@ void creditos() {
 		if (salir == false) {
 			graficos();
 			texto();
+			graficos2();
+			tecla = getch();
+			if (tecla != 0) {
+				salir = true;
+			}
+		}
+	} while (salir == false);
+}
+
+void instrucciones() {
+	Console::Clear();
+	Console::SetWindowSize(110, 30);
+	bool salir = false;
+	char tecla = 0;
+	do
+	{
+		if (salir == false) {
+			graficos();
+			textoins();
 			graficos2();
 			tecla = getch();
 			if (tecla != 0) {
@@ -145,10 +173,45 @@ void texto() {
 	//madebypapichulo
 }
 
+void textoins() {
+	Console::BackgroundColor = ConsoleColor::Black;
+	Console::SetCursorPosition(47, 4);
+	cout << "Instrucciones";
+	Console::SetCursorPosition(26, 8);
+	cout << "el juego es bastante simple en verdad este juego es";
+	Console::SetCursorPosition(26, 9);
+	cout << "para dos personas en el cual deberan de competir por quien";
+	Console::SetCursorPosition(26, 10);
+	cout << "come mas fichas que el jugador adversario, gana quien se";
+	Console::SetCursorPosition(26, 11);
+	cout << "comio todas las fichas del otro jugador el que se quedo";
+	Console::SetCursorPosition(26, 12);
+	cout << "sin fichas, asi de simple.";
+	Console::SetCursorPosition(47, 15);
+	cout << "Jugabilidad";
+	Console::SetCursorPosition(26, 19);
+	cout << "las mecanicas explicadas de manera simplificada serian,";
+	Console::SetCursorPosition(26, 20);
+	cout << "solo puedes moverte en diagonal hacia adelante con tu";
+	Console::SetCursorPosition(26, 21);
+	cout << "ficha, una vez logras llegar al otro lado del tablero tu";
+	Console::SetCursorPosition(26, 22);
+	cout << "ficha sube de nivel y se convierte en una reina con la";
+	Console::SetCursorPosition(26, 23);
+	cout << "cual segiras moviendote en diagonal pero ahora podras";
+	Console::SetCursorPosition(26, 24);
+	cout << "hacia atras, pierde el que se queda sin fichas.";
+	Console::SetCursorPosition(26, 26);
+	cout << " Eso es todo, Buena Suerte.";
+	Console::SetCursorPosition(35, 28);
+	cout << "Presione cualquier tecla para volver...";
+	//madebypapichulo
+}
+
 void graficos() {
 	for (int i = 0; i < 30; i++) {
 		for (int j = 0; j < 25; j++) {
-			Console::BackgroundColor = ConsoleColor::White;
+			Console::BackgroundColor = ConsoleColor::DarkGray;
 
 			cout << " ";
 
@@ -161,7 +224,7 @@ void graficos() {
 void graficos2() {
 	for (int i = 0; i < 25; i++) {
 		for (int j = 0; j < 30; j++) {
-			Console::BackgroundColor = ConsoleColor::White;
+			Console::BackgroundColor = ConsoleColor::DarkGray;
 			Console::SetCursorPosition(85 + i, 0 + j);
 			cout << " ";
 		}
@@ -282,9 +345,19 @@ void moverFlechitaMenu(int& opcion)
 		{
 			Console::ForegroundColor = ConsoleColor::DarkGray;
 		}
-		printf("\tCreditos");
+		printf("\tInstrucciones");
 		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, MARCO_ARRIBA_MENU + 4);
 		if (opcion == 2)
+		{
+			Console::ForegroundColor = ConsoleColor::White;
+		}
+		else
+		{
+			Console::ForegroundColor = ConsoleColor::DarkGray;
+		}
+		printf("\tCreditos\n");
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENU, MARCO_ARRIBA_MENU + 6);
+		if (opcion == 3)
 		{
 			Console::ForegroundColor = ConsoleColor::White;
 		}
