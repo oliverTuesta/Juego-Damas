@@ -1,5 +1,7 @@
 ﻿  Main.cpp
-C:\Users\Usuario\Desktop\damas\Juego-Damas\Juego-Damas\Main.cpp(225,11): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
-C:\Users\Usuario\Desktop\damas\Juego-Damas\Juego-Damas\Main.cpp(359,11): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\Usuario\Desktop\damas\Juego-Damas\Juego-Damas\Main.cpp(127,12): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\Usuario\Desktop\damas\Juego-Damas\Juego-Damas\Main.cpp(146,12): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\Usuario\Desktop\damas\Juego-Damas\Juego-Damas\Main.cpp(370,11): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\Usuario\Desktop\damas\Juego-Damas\Juego-Damas\Main.cpp(511,11): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
   Main.obj : se encontró un módulo MSIL; vinculación incremental deshabilitada para MSIL; ejecutando vínculo completo
   Juego-Damas.vcxproj -> C:\Users\Usuario\Desktop\damas\Juego-Damas\x64\Debug\Juego-Damas.exe
