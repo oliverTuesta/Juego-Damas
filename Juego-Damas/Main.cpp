@@ -93,11 +93,11 @@ void menu()
 			break;
 		case 1:
 			//instrucciones
-			mensajes(5);
+			mensajes(4);
 			break;
 		case 2:
 			//creditos
-			mensajes(4);
+			mensajes(3);
 			break;
 		}
 
