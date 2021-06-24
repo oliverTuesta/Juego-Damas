@@ -315,7 +315,16 @@ void iniciarPartida()
 			borrarTexto();
 			ubicarCoordenada(xNuevo, yNuevo);
 			if(!moverFicha(x, y, xNuevo, yNuevo, puntosA, puntosB))
+			{
 				mensajes(2);
+				mensajes(6);
+				int t = getch();
+				if (t == 101 || t == 69) {
+					mensajes(5);
+					return;
+				}
+			}
+			
 			else {
 				cambiarTurno(turnoJugador);
 				if (puntosA == 12 || puntosB == 12 || !quedanMovimientos())
@@ -337,7 +346,6 @@ void iniciarPartida()
 		y = yNuevo;
 	} while (!gameOver);
 	mostrarGanador(puntosA, puntosB, jugadorA, jugadorB);
-	_getch();
 }
 
 void cambiarTurno(char& turnoJugador)
@@ -402,6 +410,7 @@ void moverFlechitasTablero(int& x, int& y)
 		Console::SetCursorPosition(posicionXVertical, posicionAnteriorVertical);
 		printf("%c", FLECHA_IZQUIERDA);
 		tecla = getch();
+		tecla = toupper(tecla);
 		switch (tecla)
 		{
 		case DERECHA:
@@ -623,17 +632,24 @@ void mensajes(int tipo)
 		system("cls");
 		graficos();
 		Console::BackgroundColor = ConsoleColor::Black;
-		Console::SetCursorPosition(47, 4);
+		Console::SetCursorPosition(50, 4);
 		cout << "GAME OVER";
-		Console::SetCursorPosition(26, 8);
-		cout << "El jeugo a terminado en Empate";
+		Console::SetCursorPosition(40, 8);
+		cout << "EL JUEGO SE HA DECLARADO EMPATE";
 		Console::SetCursorPosition(35, 28);
 		cout << "Presione cualquier tecla para volver...";
 		_getch();
 		break;
+
+	case 6:
+		//preguntar por empate
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 10);
+		printf("SI DESEA DECLARAR EMPATE DIGITE LA TECLA \"E\"");
+		break;
 	}
 	
 }
+
 void mostrarTurno(char turnoJugador, string jugadorA, string jugadorB)
 {
 	switch (turnoJugador)
@@ -794,7 +810,7 @@ void mostrarGanador(int puntosA, int puntosB, string jugadorA, string jugadorB)
 	system("cls");
 	graficos();
 	Console::BackgroundColor = ConsoleColor::Black;
-	Console::SetCursorPosition(47, 4);
+	Console::SetCursorPosition(50, 4);
 	cout << "GAME OVER";
 	Console::SetCursorPosition(35, 8);
 	cout << "El ganador es: ";
