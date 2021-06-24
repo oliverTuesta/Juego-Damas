@@ -15,7 +15,7 @@ const int ENTER = 13;
 const int FLECHA_DERECHA = 16;
 const int FLECHA_ARRIBA = 94;
 const int FLECHA_IZQUIERDA = 60;
-const int CARACTER_FICHA = 'o';
+const int CARACTER_FICHA = 'O';
 const int CARACTER_FICHA_DAMA = '@';
 
 const int PRIMERA_OPCION_MENU = 0;
