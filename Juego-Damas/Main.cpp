@@ -51,8 +51,9 @@ void mostrarTurno(char, string, string);
 void pedirDatos(string&, string&);
 bool quedanMovimientos();
 void dibujarFichasComidas(int, int);
-//instrucciones
+//instrucciones y controles
 void instrucciones();
+void controles();
 void graficos();
 void textoins();
 void graficos2();
@@ -143,6 +144,11 @@ void instrucciones() {
 			graficos();
 			textoins();
 			graficos2();
+			_getch();
+			Console::Clear();
+			graficos();
+			controles();
+			graficos2();
 			tecla = getch();
 			if (tecla != 0) {
 				salir = true;
@@ -170,6 +176,31 @@ void texto() {
 	Console::BackgroundColor = ConsoleColor::Black;
 	Console::SetCursorPosition(35, 26);
 	cout << "Presione cualquier tecla para volver...";
+	//madebypapichulo
+}
+
+void controles() {
+	Console::BackgroundColor = ConsoleColor::Black;
+	Console::SetCursorPosition(49, 7);
+	cout << "Controles:";
+	Console::SetCursorPosition(35, 12);
+	cout << "Seleccione ficha a mover, con las flechas";
+	Console::SetCursorPosition(34, 13);
+	cout << "arriba o abajo, para moverse verticalmente";
+	Console::SetCursorPosition(36, 14);
+	cout << "por el tablero o las flechas derecha";
+	Console::SetCursorPosition(35, 15);
+	cout << "o izquierda, para moverse horizontalmente";
+	Console::SetCursorPosition(32, 16);
+	cout << "por el tablero, después seleccione la posicion";
+	Console::SetCursorPosition(35, 17);
+	cout << "deseada y pulsar enter para confirmar";
+	Console::SetCursorPosition(38, 18);
+	cout << "el movimiento y pasar el turno."; 
+	Console::SetCursorPosition(40, 19);
+	cout << "Eso es todo, Buena Suerte.";
+	Console::SetCursorPosition(31, 26);
+	cout << "Presione cualquier tecla para volver al menu...";
 	//madebypapichulo
 }
 
@@ -202,10 +233,9 @@ void textoins() {
 	Console::SetCursorPosition(26, 24);
 	cout << "hacia atras, pierde el que se queda sin fichas.";
 	Console::SetCursorPosition(26, 26);
-	cout << " Eso es todo, Buena Suerte.";
+	cout << "Eso es todo, Buena Suerte.";
 	Console::SetCursorPosition(35, 28);
-	cout << "Presione cualquier tecla para volver...";
-	//madebypapichulo
+	cout << "Presione cualquier tecla para continuar...";
 }
 
 void graficos() {
