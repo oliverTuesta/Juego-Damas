@@ -317,12 +317,13 @@ void iniciarPartida()
 			if(!moverFicha(x, y, xNuevo, yNuevo, puntosA, puntosB))
 			{
 				mensajes(2);
-				mensajes(6);
 				int t = getch();
 				if (t == 101 || t == 69) {
 					mensajes(5);
 					return;
 				}
+				else
+					borrarTexto();
 			}
 			
 			else {
@@ -577,6 +578,9 @@ void mensajes(int tipo)
 		printf("NO PUEDE MOVER A ESA POSICION");
 		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 8);
 		printf("INTENTE OTRA VEZ");
+		//preguntar por empate
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 10);
+		printf("SI DESEA DECLARAR EMPATE DIGITE LA TECLA  E");
 		break;
 	case 3:
 		//creditos
@@ -653,11 +657,6 @@ void mensajes(int tipo)
 		_getch();
 		break;
 
-	case 6:
-		//preguntar por empate
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 10);
-		printf("SI DESEA DECLARAR EMPATE DIGITE LA TECLA \"E\"");
-		break;
 	}
 	
 }
