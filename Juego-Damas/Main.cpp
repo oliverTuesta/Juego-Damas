@@ -492,7 +492,6 @@ bool movimientoDamaValido(int x, int y, int xNuevo, int yNuevo, bool& come)
 	
 
 		Console::SetCursorPosition(0, 0);
-		cout << fichasEnRango;
 	come = fichasEnRango == 1;
 	return fichasEnRango == 0 || fichasEnRango == 1;
 }
