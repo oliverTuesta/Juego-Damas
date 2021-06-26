@@ -380,6 +380,18 @@ void dibujarMapa()
 		}
 		posicionY += 2;
 	}
+	//Dibujar coordenadas
+	for (int i = 0; i < LADO_TABLERO; i++)
+	{
+		Console::SetCursorPosition(MARCO_IZQUIERDA_TABLERO - 2, MARCO_ARRIBA_TABLERO + i * 2);
+		Console::BackgroundColor = ConsoleColor::Black;
+		Console::ForegroundColor = ConsoleColor::DarkGray;
+		printf("%d", LADO_TABLERO - i);
+
+		Console::SetCursorPosition(MARCO_IZQUIERDA_TABLERO + 2 + i * 5, MARCO_ARRIBA_TABLERO - 1);
+		printf("%c", 97 + i);
+
+	}
 }
 
 void ubicarCoordenada(int& x, int& y)
