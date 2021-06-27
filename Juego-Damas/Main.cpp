@@ -591,7 +591,7 @@ void mensajes(int tipo)
 		Console::BackgroundColor = ConsoleColor::Black;
 		Console::SetCursorPosition(47, 4);
 		Console::ForegroundColor = ConsoleColor::DarkRed;
-		cout << " © Akkadia Studios";
+		cout << " © TMD Studios";
 		Console::BackgroundColor = ConsoleColor::Black;
 		Console::ForegroundColor = ConsoleColor::DarkYellow;
 		Console::SetCursorPosition(49, 10);
@@ -610,7 +610,7 @@ void mensajes(int tipo)
 		cout << "Presione cualquier tecla para volver...";
 		Console::SetCursorPosition(35, 29);
 		Console::ForegroundColor = ConsoleColor::White;
-		cout << "       © Akkadia Studios, 2021";
+		cout << "       © TMD Studios, 2021";
 		_getch();
 		break;
 	case 4:
@@ -659,7 +659,7 @@ void mensajes(int tipo)
 		cout << "Presione cualquier tecla para volver...";
 		Console::SetCursorPosition(35, 29);
 		Console::ForegroundColor = ConsoleColor::White;
-		cout << "       © Akkadia Studios, 2021";
+		cout << "       © TMD Studios, 2021";
 		_getch();
 		break;
 	case 5:
