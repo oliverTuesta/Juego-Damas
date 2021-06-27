@@ -346,6 +346,7 @@ void iniciarPartida()
 		x = xNuevo;
 		y = yNuevo;
 	} while (!gameOver);
+	_getch();
 	mostrarGanador(puntosA, puntosB, jugadorA, jugadorB);
 }
 
@@ -387,7 +388,7 @@ void dibujarMapa()
 		Console::SetCursorPosition(MARCO_IZQUIERDA_TABLERO - 2, MARCO_ARRIBA_TABLERO + i * 2);
 		Console::BackgroundColor = ConsoleColor::Black;
 		Console::ForegroundColor = ConsoleColor::DarkGray;
-		printf("%d", LADO_TABLERO - i);
+		printf("%d", i + 1);
 
 		Console::SetCursorPosition(MARCO_IZQUIERDA_TABLERO + 2 + i * 5, MARCO_ARRIBA_TABLERO - 1);
 		printf("%c", 97 + i);
@@ -590,7 +591,7 @@ void mensajes(int tipo)
 		Console::BackgroundColor = ConsoleColor::Black;
 		Console::SetCursorPosition(47, 4);
 		Console::ForegroundColor = ConsoleColor::DarkRed;
-		cout << " Akkadia Studios";
+		cout << " © Akkadia Studios";
 		Console::BackgroundColor = ConsoleColor::Black;
 		Console::ForegroundColor = ConsoleColor::DarkYellow;
 		Console::SetCursorPosition(49, 10);
@@ -646,9 +647,15 @@ void mensajes(int tipo)
 		cout << "convierte en reina, pudiendo moverse dentro de varios";
 		Console::SetCursorPosition(26, 20);
 		cout << "cuadros en diagonal.";
+		Console::SetCursorPosition(26, 21);
+		cout << "Durante la partida se podrá declarar empate seleccionando ";
 		Console::SetCursorPosition(26, 22);
+		cout << "una ficha e intentando moverla a una posición no válida.";
+		Console::SetCursorPosition(26, 23);
+		cout << "A continuacion, presione la tecla E y acabara la partida.";
+		Console::SetCursorPosition(26, 25);
 		cout << "               Eso es todo. Buena suerte.";
-		Console::SetCursorPosition(35, 25);
+		Console::SetCursorPosition(35, 27);
 		cout << "Presione cualquier tecla para volver...";
 		Console::SetCursorPosition(35, 29);
 		Console::ForegroundColor = ConsoleColor::White;
