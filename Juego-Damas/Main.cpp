@@ -54,6 +54,8 @@ void dibujarFichasComidas(int, int);
 void graficos();
 void mostrarMovimientos(int, int);
 void mostrarGanador(int, int, string, string);
+bool seguirMoviendo(int, int);
+bool movimientoDamaValido(int, int, int, int, bool&);
 
 struct ficha {
 	bool existe = false;
@@ -151,9 +153,8 @@ void inisializarFichas() {
 	}
 }
 
-bool moverFicha(int x, int y, int xNuevo, int yNuevo, int &comidasA, int &comidasB)
+bool moverFicha(int x, int y, int xNuevo, int yNuevo, int &comidasA, int &comidasB, bool &come)
 {
-	bool come = false;
 	if (puedeMover(x, y, xNuevo, yNuevo, come))
 	{
 		if (come)
@@ -303,18 +304,20 @@ void iniciarPartida()
 	inisializarFichas();
 
 	bool gameOver = false;
+	bool come;
 
 	do {
 		mostrarTurno(turnoJugador, jugadorA, jugadorB);
 		dibujarFichas();
 		ubicarCoordenada(x, y);
+		come = false;
 		if (fichas[y][x].existe && fichas[y][x].tipo == turnoJugador)
 		{
 			xNuevo = x;
 			yNuevo = y;
 			borrarTexto();
 			ubicarCoordenada(xNuevo, yNuevo);
-			if (!moverFicha(x, y, xNuevo, yNuevo, puntosA, puntosB))
+			if (!moverFicha(x, y, xNuevo, yNuevo, puntosA, puntosB, come))
 			{
 				mensajes(2);
 				int t = getch();
@@ -325,9 +328,15 @@ void iniciarPartida()
 				else
 					borrarTexto();
 			}
-
 			else {
 				cambiarTurno(turnoJugador);
+
+				if (seguirMoviendo(xNuevo, yNuevo) && come)
+				{
+					cambiarTurno(turnoJugador);
+					mensajes(6);
+				}
+				
 				if (puntosA == 12 || puntosB == 12 || !quedanMovimientos())
 				{
 					gameOver = true;
@@ -349,6 +358,75 @@ void iniciarPartida()
 	_getch();
 	mostrarGanador(puntosA, puntosB, jugadorA, jugadorB);
 	delete [] fichas;
+}
+
+bool seguirMoviendo(int x, int y)
+{
+	if (fichas[y][x].dama)
+	{
+		int j;
+		bool come;
+		for (int i = y + 1; i < LADO_TABLERO; i++)
+		{
+			j = i - y;
+			come = false;
+			if (x + j < LADO_TABLERO)
+			{
+				if (movimientoDamaValido(x, y, x + j, i, come) && come)
+				{
+					return true;
+				}
+			}
+			if (x - j >= 0)
+			{
+				if (movimientoDamaValido(x, y, x - j, i, come) && come)
+				{
+					return true;
+				}
+			}
+		}
+		for (int i = y - 1; i >= 0; i--)
+		{
+			j = abs (i - y);
+			come = false;
+			if (x + j < LADO_TABLERO)
+			{
+				if (movimientoDamaValido(x, y, x + j, i, come) && come)
+				{
+					return true;
+				}
+			}
+			if (x - j >= 0)
+			{
+				if (movimientoDamaValido(x, y, x - j, i, come) && come)
+				{
+					return true;
+				}
+			}
+		}
+	}
+	else {
+		switch (fichas[y][x].tipo)
+		{
+		case 'A':
+			if (y < LADO_TABLERO - 2 && x < LADO_TABLERO - 2 && fichas[y + 1][x + 1].existe
+				&& fichas[y + 1][x + 1].tipo == 'B' && !fichas[y + 2][x + 2].existe)
+				return true;
+			else if (y < LADO_TABLERO - 2 && x > 1 && fichas[y + 1][x - 1].existe
+				&& fichas[y + 1][x - 1].tipo == 'B' && !fichas[y + 2][x - 2].existe)
+				return true;
+			break;
+		case 'B':
+			if (y > 1 && x < LADO_TABLERO - 2 &&
+				fichas[y - 1][x + 1].existe && fichas[y - 1][x + 1].tipo == 'A' && !fichas[y - 2][x + 2].existe)
+				return true;
+			else if (y > 1 && x > 1 && fichas[y - 1][x - 1].existe && fichas[y - 1][x - 1].tipo == 'A'
+				&& !fichas[y - 2][x - 2].existe)
+				return true;
+			break;
+		}
+		return false;
+	}
 }
 
 void cambiarTurno(char& turnoJugador)
@@ -487,6 +565,8 @@ bool movimientoDamaValido(int x, int y, int xNuevo, int yNuevo, bool& come)
 			fichasEnRango++;
 			if (fichas[yAux][xAux].tipo == fichas[y][x].tipo)
 				return false;
+			else if (abs(y - yAux) == 1 && fichas[yAux][xAux].tipo != fichas[y][x].tipo)
+				return false;
 			
 		}
 		
@@ -570,9 +650,9 @@ void mensajes(int tipo)
 	switch (tipo)
 	{
 	case 1:
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE,7);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 7);
 		printf("NO PUEDE SELECCIONAR ESA POSICION");
-		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE,8);
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 8);
 		printf("INTENTE OTRA VEZ");
 		break;
 	case 2:
@@ -676,9 +756,13 @@ void mensajes(int tipo)
 		cout << "Presione cualquier tecla para volver...";
 		_getch();
 		break;
-
+	case 6:
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 7);
+		printf("MOVIMIENTOS MULTIPLES");
+		Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 8);
+		printf("INTENTE OTRA VEZ");
+		break;
 	}
-	
 }
 
 void mostrarTurno(char turnoJugador, string jugadorA, string jugadorB)
