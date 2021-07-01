@@ -314,7 +314,7 @@ void iniciarPartida()
 			yNuevo = y;
 			borrarTexto();
 			ubicarCoordenada(xNuevo, yNuevo);
-			if(!moverFicha(x, y, xNuevo, yNuevo, puntosA, puntosB))
+			if (!moverFicha(x, y, xNuevo, yNuevo, puntosA, puntosB))
 			{
 				mensajes(2);
 				int t = getch();
@@ -325,7 +325,7 @@ void iniciarPartida()
 				else
 					borrarTexto();
 			}
-			
+
 			else {
 				cambiarTurno(turnoJugador);
 				if (puntosA == 12 || puntosB == 12 || !quedanMovimientos())
@@ -348,6 +348,7 @@ void iniciarPartida()
 	} while (!gameOver);
 	_getch();
 	mostrarGanador(puntosA, puntosB, jugadorA, jugadorB);
+	delete [] fichas;
 }
 
 void cambiarTurno(char& turnoJugador)
