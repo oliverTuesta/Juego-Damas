@@ -49,7 +49,6 @@ bool estaEnNegro(int, int);
 void cambiarTurno(char&);
 void mostrarTurno(char, string, string);
 void pedirDatos(string&, string&);
-bool quedanMovimientos();
 void dibujarFichasComidas(int, int);
 void graficos();
 void mostrarMovimientos(int, int);
@@ -321,9 +320,10 @@ void iniciarPartida()
 			{
 				mensajes(2);
 				int t = getch();
+				//101 = 69 = 'E' 
 				if (t == 101 || t == 69) {
 					mensajes(5);
-					return;
+					gameOver = true;
 				}
 				else
 					borrarTexto();
@@ -337,7 +337,7 @@ void iniciarPartida()
 					mensajes(6);
 				}
 				
-				if (puntosA == 12 || puntosB == 12 || !quedanMovimientos())
+				if (puntosA == 12 || puntosB == 12)
 				{
 					gameOver = true;
 				}
@@ -565,8 +565,8 @@ bool movimientoDamaValido(int x, int y, int xNuevo, int yNuevo, bool& come)
 			fichasEnRango++;
 			if (fichas[yAux][xAux].tipo == fichas[y][x].tipo)
 				return false;
-			else if (abs(y - yAux) == 1 && fichas[yAux][xAux].tipo != fichas[y][x].tipo)
-				return false;
+			//else if (abs(y - yAux) == 1 && fichas[yAux][xAux].tipo != fichas[y][x].tipo)
+				//return false;
 			
 		}
 		
@@ -576,7 +576,7 @@ bool movimientoDamaValido(int x, int y, int xNuevo, int yNuevo, bool& come)
 		Console::SetCursorPosition(0, 0);
 		cout << fichasEnRango;
 	come = fichasEnRango == 1;
-	return fichasEnRango == 0 || fichasEnRango == 1;
+	return (fichasEnRango == 0 || fichasEnRango == 1) && !fichas[yNuevo][xNuevo].existe;
 }
 
 bool puedeMover(int x, int y, int xNuevo, int yNuevo, bool &come)
@@ -865,29 +865,6 @@ void pedirDatos(string &jugadorA, string &jugadorB)
 	Console::SetCursorPosition(MARCO_IZQUIERDA_MENSAJE, 6);
 	cin >> jugadorB;
 	borrarTexto();
-}
-
-bool quedanMovimientos()
-{
-	//TODO 
-	bool quedan = true;
-	for (int i = 0; i < LADO_TABLERO; i++)
-	{
-		for (int j = i % 2 == 0 ? 1 : 0; j < 8; j += 2)
-		{
-			if ((j + 1 < LADO_TABLERO && fichas[j][i].tipo == 'A') || 
-				(j - 1 >= 0 && fichas[j][i].tipo == 'B'))
-			{
-				quedan = true;
-			}
-			else if ((j + 2 < LADO_TABLERO && fichas[j][i].tipo == 'A' && fichas[j][i].tipo == 'B') ||
-				(j - 2 >= 0 && fichas[j][i].tipo == 'B' && fichas[j][i].tipo == 'A'))
-			{
-				quedan = true;
-			}
-		}
-	}
-	return quedan;
 }
 
 void dibujarFichasComidas(int puntosA, int puntosB) 

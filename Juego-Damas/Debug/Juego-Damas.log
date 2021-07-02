@@ -1,6 +1,6 @@
 ﻿  Main.cpp
-C:\Users\olive\Documents\UPC\programacion\Trabajo final\Juego-Damas\Juego-Damas\Main.cpp(263,11): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
-C:\Users\olive\Documents\UPC\programacion\Trabajo final\Juego-Damas\Juego-Damas\Main.cpp(323,13): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\olive\Documents\UPC\programacion\Trabajo final\Juego-Damas\Juego-Damas\Main.cpp(262,11): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\olive\Documents\UPC\programacion\Trabajo final\Juego-Damas\Juego-Damas\Main.cpp(322,13): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Users\olive\Documents\UPC\programacion\Trabajo final\Juego-Damas\Juego-Damas\Main.cpp(505,11): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
 C:\Users\olive\Documents\UPC\programacion\Trabajo final\Juego-Damas\Juego-Damas\Main.cpp(430): warning C4715: 'seguirMoviendo': not all control paths return a value
   Main.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
