@@ -1,6 +1,9 @@
 ﻿  Main.cpp
-C:\Users\Luis Maco\Desktop\Programming\trabajofinal\Juego-Damas\Juego-Damas\Main.cpp(262,11): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
-C:\Users\Luis Maco\Desktop\Programming\trabajofinal\Juego-Damas\Juego-Damas\Main.cpp(321,13): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
-C:\Users\Luis Maco\Desktop\Programming\trabajofinal\Juego-Damas\Juego-Damas\Main.cpp(424,11): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
-  Main.obj : se encontró un módulo MSIL; vinculación incremental deshabilitada para MSIL; ejecutando vínculo completo
-  Juego-Damas.vcxproj -> C:\Users\Luis Maco\Desktop\Programming\trabajofinal\Juego-Damas\x64\Debug\Juego-Damas.exe
+C:\Users\olive\Documents\UPC\CICLO 1\Trabajo final\Juego-Damas\Juego-Damas\Main.cpp(262,11): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\olive\Documents\UPC\CICLO 1\Trabajo final\Juego-Damas\Juego-Damas\Main.cpp(322,13): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\olive\Documents\UPC\CICLO 1\Trabajo final\Juego-Damas\Juego-Damas\Main.cpp(506,11): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  .NETFramework,Version=v4.7.2.AssemblyAttributes.cpp
+  Generating Code...
+C:\Users\olive\Documents\UPC\CICLO 1\Trabajo final\Juego-Damas\Juego-Damas\Main.cpp(431): warning C4715: 'seguirMoviendo': not all control paths return a value
+  Main.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
+  Juego-Damas.vcxproj -> C:\Users\olive\Documents\UPC\CICLO 1\Trabajo final\Juego-Damas\x64\Debug\Juego-Damas.exe
